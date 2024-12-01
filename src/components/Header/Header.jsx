@@ -1,7 +1,4 @@
 import Container from "../Container/Container";
-// import UserAuth from "../UserAuth/UserAuth";
-// import UserLogo from "../UserLogo/UserLogo";
-
 import { selectIsLogged } from "../../store/selectors";
 import { useSelector } from "react-redux";
 import {
@@ -10,6 +7,7 @@ import {
   StyledUserAuthLink,
   StyledWrapper,
 } from "./Header.styled";
+import logo from "../../assets/Logo2.png"; // Import the logo
 
 export const Header = () => {
   const isAuthenticated = useSelector(selectIsLogged);
@@ -18,10 +16,12 @@ export const Header = () => {
       <Container>
         <StyledWrapper>
           <StyledUserAuthLink to={isAuthenticated ? "/home" : "/welcome"}>
-            {/* <svg width={102} height={48}>
-              <use href={`${sprite}#icon-logo-1`} />
-            </svg> */}
-            LINK
+            <img
+              src={logo}
+              alt="Logo"
+              style={{ width: "180px", height: "auto" }}
+            />{" "}
+            {/* Adjust size */}
           </StyledUserAuthLink>
           <LngLogoutWrap>
             <StyledBox>
