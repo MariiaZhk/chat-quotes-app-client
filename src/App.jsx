@@ -1,5 +1,52 @@
-function App() {
-  return <>Hello</>;
-}
+import { Route, Routes } from "react-router-dom";
+import SharedLayout from "./components/SharedLayout/SharedLayout";
+import WelcomePage from "./pages/WelcomePage/WelcomePage";
+import PublicRoute from "./routesConfig/PublicRoute";
+import PrivateRoute from "./routesConfig/PrivateRoute";
+import HomePage from "./pages/HomePage/HomePage";
+import SignInPage from "./pages/SignInPage/SignInPage";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
 
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<SharedLayout />}>
+        <Route
+          index
+          element={
+            <PublicRoute>
+              <WelcomePage />
+            </PublicRoute>
+          }
+        />
+        <Route path="/welcome" element={<WelcomePage />} />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <HomePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <PublicRoute>
+              <SignInPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <SignUpPage />
+            </PublicRoute>
+          }
+        />
+        {/* <Route path="*" element={<ErrorPage />} /> */}
+      </Route>
+    </Routes>
+  );
+}
 export default App;
