@@ -1,16 +1,29 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const WelcomePageContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f3fafa;
-  font-family: "Arial", sans-serif;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 280px;
+  margin: 0 auto;
+
+  @media only screen and (min-width: 768px) {
+    gap: 60px;
+    max-width: 704px;
+  }
+  @media only screen and (min-width: 1440px) {
+    max-width: 1280px;
+    flex-direction: row;
+    gap: 88px;
+    justify-content: center;
+    align-items: flex-end;
+    padding-top: 56px;
+  }
 `;
 
-const WelcomeTextContainer = styled.div`
+const WelcomeLeftContainer = styled.div`
   text-align: center;
   padding: 20px;
   max-width: 600px;
@@ -18,17 +31,22 @@ const WelcomeTextContainer = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 `;
-
+const WelcomeRightContainer = styled.div`
+  text-align: center;
+  padding: 20px;
+  max-width: 600px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+`;
 const WelcomeTitle = styled.h1`
   color: #3faffa;
-  font-size: 2rem;
   margin-bottom: 10px;
 `;
 
 const FeatureList = styled.ul`
   list-style-type: none;
   padding-left: 0;
-  font-size: 1rem;
   color: #333;
 `;
 
@@ -36,12 +54,20 @@ const FeatureItem = styled.li`
   margin: 10px 0;
 `;
 
-const WelcomePage = () => {
+function WelcomePage() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/signup");
+  };
   return (
     <WelcomePageContainer>
-      <WelcomeTextContainer>
-        <WelcomeTitle>Welcome to ChatApp!</WelcomeTitle>
-        <p>Your Real-time Chat Companion</p>
+      <WelcomeLeftContainer>
+        <WelcomeTitle>Welcome to ChatQuoApp!</WelcomeTitle>
+
+        <button onClick={handleClick}>Try ChatQuoApp</button>
+      </WelcomeLeftContainer>
+      <WelcomeRightContainer>
         <p>
           Join our community and start chatting right away. ChatApp makes
           communication easy with seamless features, including:
@@ -70,9 +96,9 @@ const WelcomePage = () => {
             • Search Chats: Find any conversation in an instant.
           </FeatureItem>
         </FeatureList>
-      </WelcomeTextContainer>
+      </WelcomeRightContainer>
     </WelcomePageContainer>
   );
-};
+}
 
 export default WelcomePage;

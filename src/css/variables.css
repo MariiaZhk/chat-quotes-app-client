@@ -1,0 +1,18 @@
+:root {
+  --primary-text: #2f2f2f;
+  --secondary-text: #407bff;
+  --white-text: #ffffff;
+  --accent-text: #ff9d43;
+  --percentage-text: #9ebbff;
+  --error-text: #ef5050;
+  --card-bg-color: #ecf2ff;
+  --accent-bg-color: #d7e3ff;
+  --tooltip-bg-color: #fff;
+  --greeting-bg-color: rgba(249, 250, 251, 0.7);
+  --bcgclr: #ffffff;
+  --tabs-color: #ffffff;
+  --btn-bg-color: #407bff;
+  --btn-text-color: #ffffff;
+  --modal-btn-bg: #407bff;
+  --modal-btn-color: #ffffff;
+}
