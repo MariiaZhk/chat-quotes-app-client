@@ -1,15 +1,16 @@
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-// import { loginThunk } from "../../redux/auth/operations";
 import * as yup from "yup";
 import AuthForm from "../../components/AuthForm/AuthForm";
 import Container from "../../components/Container/Container";
+import { loginThunk } from "../../store/operations";
 
 const schema = yup
   .object({
     email: yup
       .string()
       .email("Please write valid email")
+      .matches(/^(?!.*@[^,]*,)/)
       .required("Email is required"),
     password: yup
       .string()
@@ -22,7 +23,8 @@ const SignInPage = () => {
   const dispatch = useDispatch();
 
   const submit = ({ email, password }) => {
-    dispatch(loginThunk({ email, password }))
+    const normalizedEmail = email.toLowerCase();
+    dispatch(loginThunk({ email: normalizedEmail, password }))
       .unwrap()
       .then((res) => {
         toast.success(

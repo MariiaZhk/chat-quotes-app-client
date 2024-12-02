@@ -1,0 +1,29 @@
+import { RotatingLines } from "react-loader-spinner";
+
+import styled from "styled-components";
+
+const Loading = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  color: black;
+`;
+
+const Loader = ({ visible }) => {
+  return (
+    <Loading>
+      <RotatingLines
+        visible={visible}
+        strokeColor={"#9ebbff"}
+        strokeWidth="5"
+        animationDuration="5"
+        ariaLabel="rotating-lines-loading"
+        height="150"
+        width="150"
+      />
+    </Loading>
+  );
+};
+export default Loader;

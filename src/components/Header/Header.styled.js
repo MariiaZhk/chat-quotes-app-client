@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const StyledWrapper = styled.div`
@@ -19,26 +20,8 @@ export const StyledWrapper = styled.div`
   }
 `;
 
-export const LngLogoutWrap = styled.div`
-  display: flex;
-  align-items: baseline;
-`;
-
-export const StyledBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-`;
-
-import { Link } from "react-router-dom";
-
 export const StyledUserAuthLink = styled(Link)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-export const StyledSvg = styled.svg`
-  height: 48px;
 `;

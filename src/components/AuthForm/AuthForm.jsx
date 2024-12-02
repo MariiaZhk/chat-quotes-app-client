@@ -43,8 +43,38 @@ function AuthForm({ type, onSubmit, schema }) {
     <StyledSection>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormHeading>{type === "signup" ? "Sign Up" : "Sign In"}</FormHeading>
+
+        {type === "signup" && (
+          <>
+            <FormLabel>
+              <StyledInput
+                type="text"
+                placeholder="First Name"
+                name="firstName"
+                {...register("firstName")}
+                $error={!!errors?.firstName}
+              />
+              {errors?.firstName && (
+                <ErrorSpan>{errors?.firstName?.message}</ErrorSpan>
+              )}
+            </FormLabel>
+
+            <FormLabel>
+              <StyledInput
+                type="text"
+                placeholder="Last Name"
+                name="lastName"
+                {...register("lastName")}
+                $error={!!errors?.lastName}
+              />
+              {errors?.lastName && (
+                <ErrorSpan>{errors?.lastName?.message}</ErrorSpan>
+              )}
+            </FormLabel>
+          </>
+        )}
+
         <FormLabel>
-          Enter email
           <StyledInput
             type="email"
             placeholder="Email"
@@ -56,7 +86,6 @@ function AuthForm({ type, onSubmit, schema }) {
         </FormLabel>
 
         <FormLabel>
-          Enter password
           <StyledInput
             type={eyePass.password ? "text" : "password"}
             placeholder="Password"
@@ -75,9 +104,8 @@ function AuthForm({ type, onSubmit, schema }) {
           </PassShowBtn>
         </FormLabel>
 
-        {type === "signup" && (
+        {/* {type === "signup" && (
           <FormLabel>
-            Repeat password
             <StyledInput
               type={eyePass.repPassword ? "text" : "password"}
               placeholder="Repeat password"
@@ -95,7 +123,7 @@ function AuthForm({ type, onSubmit, schema }) {
               {eyePass.repPassword ? <OpenPassEye /> : <PassEye />}
             </PassShowBtn>
           </FormLabel>
-        )}
+        )} */}
 
         <FormBtn type="submit">
           {type === "signup" ? "Sign Up" : "Sign In"}
