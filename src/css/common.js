@@ -39,7 +39,7 @@ button {
   cursor: pointer;
   box-shadow: var(--shadow);
   background-color: var(--btn-bg-color);
-  color: var( --btn-text-color);
+  color: var( --white-text);
   border-radius: 10px;
   border:none;
    transition: all 0.4s;

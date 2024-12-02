@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Form,
-  BtnLink,
   ErrorSpan,
   FormBtn,
   FormHeading,
@@ -13,6 +12,7 @@ import {
   PassShowBtn,
   StyledInput,
   StyledSection,
+  BtnLink,
 } from "../../components/AuthForm/AuthForm.styled";
 import PassEye from "../../assets/PassEye";
 import OpenPassEye from "../../assets/OpenPassEye";

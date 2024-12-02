@@ -16,12 +16,12 @@ const Loader = ({ visible }) => {
     <Loading>
       <RotatingLines
         visible={visible}
-        strokeColor={"#9ebbff"}
+        strokeColor={"var(--loader)"}
         strokeWidth="5"
         animationDuration="5"
         ariaLabel="rotating-lines-loading"
-        height="150"
-        width="150"
+        height="120"
+        width="120"
       />
     </Loading>
   );

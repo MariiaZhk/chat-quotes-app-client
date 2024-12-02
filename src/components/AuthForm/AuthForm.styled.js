@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 export const StyledSection = styled.section`
   max-width: 500px;
   margin: 0 auto;
+  margin-top: 100px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -12,7 +13,7 @@ export const StyledSection = styled.section`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 26px;
   width: 100%;
 `;
 export const FormHeading = styled.h2`
@@ -29,7 +30,7 @@ export const FormLabel = styled.label`
 `;
 
 export const StyledInput = styled.input`
-  margin-top: 8px;
+  position: relative;
   padding: 12px 10px;
   border-radius: 6px;
   outline: none;
@@ -69,11 +70,12 @@ export const BtnLink = styled(NavLink)`
 `;
 
 export const PassShowBtn = styled.button`
-  background-color: transparent;
-  border: none;
   position: absolute;
   right: 10px;
-  top: 45px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
   height: 16px;
   width: 16px;
   display: flex;

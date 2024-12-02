@@ -10,7 +10,7 @@ export const registerThunk = createAsyncThunk(
       const { user, token } = data;
       return { user, token };
     } catch (error) {
-      toast.error(error.message);
+      //   toast.error(error.message);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -26,7 +26,7 @@ export const loginThunk = createAsyncThunk(
       console.log(data.token);
       return data;
     } catch (error) {
-      toast.error(error.message);
+      //   toast.error(error.message);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -38,8 +38,6 @@ export const logoutThunk = createAsyncThunk(
     try {
       await api.post("auth/logout");
       localStorage.removeItem("auth");
-      localStorage.removeItem("counter");
-      localStorage.removeItem("data");
       clearToken();
     } catch (error) {
       toast.error(error.message);

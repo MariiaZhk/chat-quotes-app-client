@@ -14,7 +14,7 @@ const schema = yup
       .required("Email is required"),
     password: yup
       .string()
-      .min(8, "Password must be at least 8 characters")
+      .min(8, "Password must be at least 6 characters")
       .required("Password is required"),
   })
   .required();
@@ -36,7 +36,7 @@ const SignInPage = () => {
 
   return (
     <Container>
-      <AuthForm type="signin" onSubmit={submit} schema={schema} />;
+      <AuthForm type="signin" onSubmit={submit} schema={schema} />
     </Container>
   );
 };

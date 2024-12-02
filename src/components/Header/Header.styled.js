@@ -7,11 +7,10 @@ export const StyledWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
 
   @media only screen and (min-width: 768px) {
     padding: 16px 0 0;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
 
   @media only screen and (min-width: 1440px) {

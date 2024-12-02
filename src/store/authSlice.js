@@ -54,6 +54,9 @@ export const authSlice = createSlice({
         state.isLogged = true;
         state.isLoading = false;
       })
+      .addCase(logoutThunk.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(logoutThunk.fulfilled, (state) => {
         state.user = {
           email: "",
@@ -61,9 +64,12 @@ export const authSlice = createSlice({
           lastName: "",
         };
         state.token = "";
-        state.var = "";
         state.isLogged = false;
         state.isLoading = false;
+      })
+      .addCase(logoutThunk.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = payload;
       })
       .addCase(refreshThunk.pending, (state) => {
         state.isLoading = true;

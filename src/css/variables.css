@@ -6,10 +6,14 @@
   --error-text: #ef5050;
   --card-bg-color: #d3ebf6;
   --main-bg-color: #eaf7fb;
-  --bubbles-bg-color: rgb(156, 211, 230);
+  --bubbles-bg-color: #9cd3e6;
   --btn-bg-color: #176f8a;
   --btn-hover-focus-color: #2296b9;
-  --btn-text-color: #ffffff;
   --icons-color: #176f8a;
-  --shadow: 0 4px 8px 0 #a6bcc3;
+  --shadow: 0 4px 8px 0 #8399a1;
+  --loader: #8399a1;
+  --bot-messages-bg: #f4f1e7;
+  --user-messages-bg: #aaeeb1;
+  --grey: #6c757d;
+  --light-grey: #f1f3f5;
 }
