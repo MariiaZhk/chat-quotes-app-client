@@ -7,7 +7,7 @@ import { persistor, store } from "./store/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import ToastNotification from "./ToastNotification/ToastNotification.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <PersistGate loading={null} persistor={persistor}>
         <App />
         <Global />
-        <ToastContainer />
+        <ToastNotification />
       </PersistGate>
     </Provider>
   </BrowserRouter>

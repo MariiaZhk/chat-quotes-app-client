@@ -1,14 +1,15 @@
 import { toast } from "react-toastify";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { api, clearToken, setToken } from "../configApi/configApi";
+import { api, clearToken, setToken } from "../../configApi/configApi";
 
 export const registerThunk = createAsyncThunk(
   "auth/register",
   async (credentials, thunkAPI) => {
     try {
       const { data } = await api.post("auth/register", credentials);
-      const { user, token } = data;
-      return { user, token };
+      setToken(data.token);
+      console.log(data);
+      return data;
     } catch (error) {
       //   toast.error(error.message);
       return thunkAPI.rejectWithValue(error.response.data);
@@ -22,8 +23,6 @@ export const loginThunk = createAsyncThunk(
     try {
       const { data } = await api.post("auth/login", credentials);
       setToken(data.token);
-      console.log(data);
-      console.log(data.token);
       return data;
     } catch (error) {
       //   toast.error(error.message);

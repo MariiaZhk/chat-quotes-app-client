@@ -1,9 +1,9 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import AuthForm from "../../components/AuthForm/AuthForm";
-import Container from "../../components/Container/Container";
-import { loginThunk } from "../../store/operations";
+import { loginThunk } from "../../store/Auth/operations";
+import { selectUserFirstName } from "../../store/selectors";
 
 const schema = yup
   .object({
@@ -14,31 +14,26 @@ const schema = yup
       .required("Email is required"),
     password: yup
       .string()
-      .min(8, "Password must be at least 6 characters")
+      .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
   })
   .required();
 
-const SignInPage = () => {
+function SignInPage() {
   const dispatch = useDispatch();
+  const userName = useSelector(selectUserFirstName);
 
   const submit = ({ email, password }) => {
     const normalizedEmail = email.toLowerCase();
     dispatch(loginThunk({ email: normalizedEmail, password }))
       .unwrap()
-      .then((res) => {
-        toast.success(
-          `Welcome ${res.user.name || res.user.email.split("@")[0]}`
-        );
+      .then(() => {
+        toast.success(`Welcome ${userName}`);
       })
       .catch((err) => toast.error(err));
   };
 
-  return (
-    <Container>
-      <AuthForm type="signin" onSubmit={submit} schema={schema} />
-    </Container>
-  );
-};
+  return <AuthForm type="signin" onSubmit={submit} schema={schema} />;
+}
 
 export default SignInPage;

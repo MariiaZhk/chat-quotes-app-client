@@ -8,7 +8,7 @@ import SignInPage from "./pages/SignInPage/SignInPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import { useSelector } from "react-redux";
 import { selectIsLoading, selectIsRefresh } from "./store/selectors";
-import Loader from "./Loader/Loader";
+import Loader from "./components/Loader/Loader";
 
 function App() {
   const isLoading = useSelector(selectIsLoading);

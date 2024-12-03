@@ -128,9 +128,22 @@ function AuthForm({ type, onSubmit, schema }) {
         <FormBtn type="submit">
           {type === "signup" ? "Sign Up" : "Sign In"}
         </FormBtn>
+        {type === "signup" ? (
+          <p>
+            Already have an account?{" "}
+            <BtnLink to={path}>
+              <strong>Sign In</strong>
+            </BtnLink>
+          </p>
+        ) : (
+          <p>
+            Don't have an account yet?{" "}
+            <BtnLink to={path}>
+              <strong>Sign Up</strong>
+            </BtnLink>
+          </p>
+        )}
       </Form>
-
-      <BtnLink to={path}>{type === "signup" ? "Sign In" : "Sign Up"}</BtnLink>
     </StyledSection>
   );
 }

@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const WelcomePageContainer = styled.div`
   margin: 0 auto;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,7 +27,7 @@ export const WelcomeRightContainer = styled.div`
   box-shadow: var(--shadow);
   background: var(--card-bg-color);
   margin-bottom: 20px;
-  /* max-width: 300px; */
+
   @media only screen and (min-width: 768px) {
     padding: 32px 24px;
   }
@@ -50,6 +51,7 @@ export const WelcomeTitle = styled.h1`
   }
 `;
 export const WelcomeSubtitle = styled.h2`
+  font-weight: 500;
   font-size: 24px;
 
   padding-bottom: 28px;
@@ -102,20 +104,13 @@ export const LeftItem = styled.li`
 `;
 
 export const TryButton = styled.button`
-  border-radius: 10px;
   padding: 8px 30px;
   width: 100%;
-  height: 36px;
   font-weight: 500;
   font-size: 16px;
-  background-color: var(--btn-bg-color);
-  text-align: center;
-  color: var(--btn-text-color);
-  border: none;
 
   @media only screen and (min-width: 768px) {
     width: 48%;
-    height: 41px;
     font-size: 18px;
   }
 

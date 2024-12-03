@@ -1,7 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-import { authReducer } from "./authSlice";
-
+import { authReducer } from "./Auth/authSlice";
 import {
   persistStore,
   persistReducer,
@@ -13,6 +11,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { chatReducer } from "./Chat/chatSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -20,12 +19,20 @@ const authPersistConfig = {
   storage,
   whitelist: ["token", "user"],
 };
+const chatPersistConfig = {
+  key: "chat",
+  version: 1,
+  storage,
+  whitelist: ["chats"],
+};
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+const persistedChatReducer = persistReducer(chatPersistConfig, chatReducer);
 
 export const store = configureStore({
   reducer: {
     authSlice: persistedAuthReducer,
+    chatSlice: persistedChatReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
 export const StyledSection = styled.section`
-  max-width: 500px;
+  max-width: 450px;
   margin: 0 auto;
   margin-top: 100px;
   display: flex;
@@ -14,7 +14,10 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 26px;
+  padding: 20px 30px;
   width: 100%;
+  background-color: var(--card-bg-color);
+  border-radius: 10px;
 `;
 export const FormHeading = styled.h2`
   font-weight: 700;
@@ -32,15 +35,15 @@ export const FormLabel = styled.label`
 export const StyledInput = styled.input`
   position: relative;
   padding: 12px 10px;
-  border-radius: 6px;
   outline: none;
   color: ${({ $error }) =>
     $error ? "var(--error-text)" : "var(--secondary-text)"};
+  border-radius: 6px;
   border: 1px solid
     ${({ $error }) => ($error ? "var(--error-text)" : "var(--secondary-text)")};
 
   &::placeholder {
-    color: var(--secondary-text);
+    color: var(--grey);
     font-size: 16px;
     line-height: 20px;
   }
@@ -48,7 +51,6 @@ export const StyledInput = styled.input`
 
 export const FormBtn = styled.button`
   width: 100%;
-  margin-bottom: 16px;
   font-size: 16px;
   padding: 8px 30px;
   border-radius: 10px;
