@@ -4,45 +4,46 @@ export const StyledChatArea = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+`;
 
-  /* padding-bottom: 50px; */
-  overflow-y: scroll;
+export const ChatAreaHead = styled.div`
   display: flex;
-  /* flex-direction: column-reverse; */
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--card-bg-color);
+`;
 
-  .messages {
+export const MessageList = styled.div`
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+`;
+
+export const Message = styled.div`
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: ${(props) =>
+    props.isUserMessage ? "var(--user-messages-bg)" : "var(--bot-messages-bg)"};
+  border-radius: 5px;
+  align-self: ${(props) => (props.isUserMessage ? "flex-end" : "flex-start")};
+`;
+
+export const MessageInput = styled.form`
+  display: flex;
+  gap: 10px;
+
+  input {
     flex-grow: 1;
-    overflow-y: auto;
-    padding-bottom: 20px;
-
-    .message {
-      margin-bottom: 10px;
-      padding: 10px;
-      background-color: var(--bot-messages-bg);
-      border-radius: 5px;
-    }
-
-    .user-message {
-      background-color: var(--user-messages-bg);
-      align-self: flex-end;
-    }
+    padding: 10px;
+    border: 1px solid var(--grey);
   }
 
-  .message-input {
-    display: flex;
-    gap: 10px;
-
-    input {
-      flex-grow: 1;
-      padding: 10px;
-      border: 1px solid var(--grey);
-      border-radius: 5px;
-    }
-
-    button {
-      padding: 10px 20px;
-      border-radius: 5px;
-    }
+  button {
+    padding: 10px 20px;
   }
 `;

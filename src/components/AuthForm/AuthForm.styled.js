@@ -38,7 +38,7 @@ export const StyledInput = styled.input`
   outline: none;
   color: ${({ $error }) =>
     $error ? "var(--error-text)" : "var(--secondary-text)"};
-  border-radius: 6px;
+  /* border-radius: 6px; */
   border: 1px solid
     ${({ $error }) => ($error ? "var(--error-text)" : "var(--secondary-text)")};
 
@@ -53,7 +53,6 @@ export const FormBtn = styled.button`
   width: 100%;
   font-size: 16px;
   padding: 8px 30px;
-  border-radius: 10px;
 
   @media only screen and (min-width: 768px) {
     font-size: 18px;

@@ -1,19 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addChatThunk, fetchChatsThunk, sendMessageThunk } from "./operations"; // Define thunks for fetching, creating chats, sending messages
+import { addChatThunk, fetchChatsThunk, getQuoteThunk } from "./operations"; // Define thunks for fetching, creating chats, sending messages
 
 export const chatSlice = createSlice({
   name: "chat",
   initialState: {
     chats: [],
-    currentChat: null,
-    // quotes: [], // Initialize quotes as an empty array
+    currentChat: {
+      _id: null,
+      name: "",
+      messages: [], // Initialize messages as an empty array
+    },
     isLoading: false,
     isError: null,
   },
   reducers: {
     setCurrentChat: (state, { payload }) => {
-      state.currentChat =
-        state.chats.find((chat) => chat._id === payload) || null;
+      state.currentChat = state.chats.find((chat) => chat._id === payload);
     },
     addMessage: (state, { payload }) => {
       if (state.currentChat) {
@@ -41,17 +43,32 @@ export const chatSlice = createSlice({
       .addCase(fetchChatsThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.chats = payload;
+        if (payload.length > 0) {
+          state.currentChat = payload[0];
+        }
         state.isError = null;
       })
       .addCase(fetchChatsThunk.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = payload;
       })
-      .addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
-        const chat = state.chats.find((chat) => chat._id === payload.chatId);
-        if (chat) {
-          chat.push(payload);
+      .addCase(getQuoteThunk.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getQuoteThunk.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        if (state.currentChat) {
+          state.currentChat.messages.push({
+            _id: `quote-${Date.now()}`,
+            content: payload.content,
+            author: payload.author,
+            createdAt: new Date().toISOString(),
+          });
         }
+      })
+      .addCase(getQuoteThunk.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = payload;
       });
   },
 });

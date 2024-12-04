@@ -1,28 +1,25 @@
 import styled from "styled-components";
 
 export const StyledSidebar = styled.aside`
-  width: 300px;
-  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  background-color: var(--white-text);
   border-right: 3px solid var(--light-grey);
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      padding: 10px;
-      border-radius: 0px;
-      border-bottom: 2px solid var(--light-grey);
-      cursor: pointer;
-      &:hover {
-        background-color: var(--white-text);
-      }
-    }
-  }
+`;
+export const SidebarActionsWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg-color);
+  gap: 10px;
+  padding: 10px;
+`;
+export const SidebarTitleBtnsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const SidebarButtonsWrapper = styled.div`
@@ -31,7 +28,6 @@ export const SidebarButtonsWrapper = styled.div`
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
 `;
 
 export const SidebarButton = styled.button`
@@ -42,11 +38,18 @@ export const SidebarButton = styled.button`
   height: 36px;
   background-color: transparent;
   box-shadow: none;
+  border: none;
+  cursor: pointer;
+
   &:hover,
   &:focus {
     background-color: transparent;
   }
+
   svg {
+    width: 20px;
+    height: 20px;
+    color: var(--secondary-text);
     &:hover,
     &:focus {
       color: var(--accent-text);
@@ -86,21 +89,14 @@ export const StyledDropdownItem = styled.div`
   }
 `;
 
-export const StyledTooltip = styled.span`
+export const StyledTitle = styled.h3`
   color: var(--secondary-text);
-`;
-
-export const ActionsWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 export const StyledSearchInput = styled.input`
   padding: 8px;
-  margin-bottom: 10px;
   border: 1px solid var(--grey);
-  border-radius: 5px;
+  border-radius: 16px;
   font-size: 14px;
   outline: none;
 

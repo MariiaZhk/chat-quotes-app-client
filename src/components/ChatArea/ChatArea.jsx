@@ -1,78 +1,86 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { StyledChatArea } from "./ChatArea.styled";
-import { sendMessageThunk } from "../../store/Chat/operations";
+import {
+  StyledChatArea,
+  Message,
+  MessageInput,
+  MessageList,
+  ChatAreaHead,
+} from "./ChatArea.styled";
+import { getQuoteThunk } from "../../store/Chat/operations";
 import { selectCurrentChat } from "../../store/selectors";
+import { ChatItemIcon, ChatItemName } from "../ChatItem/ChatItem.styled";
+import { addMessage } from "../../store/Chat/chatSlice";
 
 const ChatArea = () => {
   const [message, setMessage] = useState("");
-  const [localMessages, setLocalMessages] = useState([]);
-  const [localQuotes, setLocalQuotes] = useState([]);
   const dispatch = useDispatch();
   const currentChat = useSelector(selectCurrentChat);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!message.trim()) return;
-    // if (!currentChat) {
-    //   alert("Please select a chat before sending a message.");
-    //   return;
-    // }
 
-    const resultAction = await dispatch(sendMessageThunk(message));
-    if (sendMessageThunk.fulfilled.match(resultAction)) {
-      const fetchedQuotes = resultAction.payload;
-      setLocalQuotes(fetchedQuotes);
+    const userMessage = {
+      _id: `local-${Date.now()}`,
+      content: message,
+      author: "You",
+      createdAt: new Date().toISOString(),
+    };
 
-      const userMessage = {
-        _id: `local-${Date.now()}`,
-        content: message,
-        author: "You",
-        createdAt: new Date().toISOString(),
-      };
+    // Додати повідомлення користувача в Redux
+    dispatch(addMessage(userMessage)); // Redux action
 
-      setLocalMessages((prevMessages) => [...prevMessages, userMessage]);
-    } else if (sendMessageThunk.rejected.match(resultAction)) {
-      console.error(resultAction.payload);
-    }
+    setMessage(""); // Очистити поле вводу
 
-    setMessage("");
+    // Автовідповідь через 3 секунди
+    setTimeout(async () => {
+      const resultAction = await dispatch(getQuoteThunk(message));
+      if (getQuoteThunk.fulfilled.match(resultAction)) {
+        const fetchedQuote = resultAction.payload;
+
+        const autoResponse = {
+          _id: `quote-${Date.now()}`,
+          content: fetchedQuote.content || "No quote found.",
+          author: fetchedQuote.author || "Unknown",
+          createdAt: new Date().toISOString(),
+        };
+
+        // Додати відповідь у Redux
+        dispatch(addMessage(autoResponse));
+      } else if (getQuoteThunk.rejected.match(resultAction)) {
+        console.error(resultAction.payload);
+      }
+    }, 3000);
   };
 
   return (
     <StyledChatArea>
-      <div className="messages">
+      <ChatAreaHead>
         {currentChat ? (
-          [...currentChat.messages, ...localMessages].map((msg) => (
-            <div key={msg._id} className="message">
+          <>
+            <ChatItemIcon src="../../assets/Logo.png" alt="Chat Icon" />
+            <ChatItemName>{currentChat.name}</ChatItemName>
+          </>
+        ) : (
+          "Please select a chat"
+        )}
+      </ChatAreaHead>
+      <MessageList>
+        {currentChat && currentChat.messages ? (
+          currentChat.messages.map((msg) => (
+            <Message key={msg._id} isUserMessage={msg.author === "You"}>
               <p>
                 <strong>{msg.author}:</strong> {msg.content}
               </p>
               <small>{new Date(msg.createdAt).toLocaleString()}</small>
-            </div>
+            </Message>
           ))
         ) : (
-          <div className="message">
-            Please select a chat to start messaging.
-          </div>
+          <Message>Please select a chat to start messaging.</Message>
         )}
-        {localQuotes.length > 0 && (
-          <div className="message">
-            <strong>Quote Results:</strong>
-            <ul>
-              {localQuotes.map((quote) => (
-                <li key={quote._id}>
-                  <p>
-                    {quote.content} - <em>{quote.author}</em>
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-      <form className="message-input" onSubmit={handleSubmit}>
+      </MessageList>
+      <MessageInput onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Type your message..."
@@ -80,9 +88,8 @@ const ChatArea = () => {
           onChange={(e) => setMessage(e.target.value)}
         />
         <button type="submit">Send</button>
-      </form>
+      </MessageInput>
     </StyledChatArea>
   );
 };
-
 export default ChatArea;

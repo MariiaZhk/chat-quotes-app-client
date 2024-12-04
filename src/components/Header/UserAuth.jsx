@@ -2,11 +2,7 @@ import { LuUserCircle2 } from "react-icons/lu";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {
-  selectIsLoading,
-  selectIsLogged,
-  selectUserFirstName,
-} from "../../store/selectors";
+import { selectIsLogged, selectUserFirstName } from "../../store/selectors";
 
 export const StyledUserAuthWrapper = styled.div`
   display: flex;
@@ -37,11 +33,14 @@ const UserAuth = () => {
   const isLogged = useSelector(selectIsLogged);
   const userFirstName = useSelector(selectUserFirstName);
 
+  const displayText = isLogged ? `${userFirstName}` : "Sign in";
+  const linkProps = isLogged ? {} : { to: "/signin", as: Link };
+
   return (
     <StyledUserAuthWrapper>
-      <StyledLink to="/signin">
-        <StyledSpan>Sign in</StyledSpan>
+      <StyledLink {...linkProps}>
         <LuUserCircle2 size={28} />
+        <StyledSpan>{displayText}</StyledSpan>
       </StyledLink>
     </StyledUserAuthWrapper>
   );

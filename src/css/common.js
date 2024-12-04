@@ -8,7 +8,13 @@ body {
   min-height: 100vh;
   color: var(--primary-text);
   background-color: var(--main-bg-color);
-  overflow: hidden;
+ }
+
+@media screen and (min-width: 1440px) {
+  body {
+    height: 100vh;
+    max-height: 100vh;
+  }
 }
 
 h1,
@@ -24,6 +30,7 @@ ul,
 ol {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 img {
@@ -40,7 +47,7 @@ button {
   box-shadow: var(--shadow);
   background-color: var(--btn-bg-color);
   color: var( --white-text);
-  border-radius: 10px;
+  border-radius: 16px;
   border:none;
    transition: all 0.4s;
     &:hover,
@@ -61,15 +68,12 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
   background-color: inherit !important;
-  color: var(--text-forms);
+  color: var(--secondary-text);
 }
-
-@media screen and (min-width: 1440px) {
-  body {
-    height: 100vh;
-    max-height: 100vh;
+  input{
+    border-radius: 16px;
   }
-}
+
 
 
 `;

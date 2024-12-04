@@ -1,21 +1,24 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutThunk } from "../../store/Auth/operations";
 import { addChatThunk, fetchChatsThunk } from "../../store/Chat/operations";
+import { setCurrentChat } from "../../store/Chat/chatSlice"; // Import setCurrentChat
 import {
-  ActionsWrap,
+  SidebarActionsWrap,
   SidebarButton,
   SidebarButtonsWrapper,
+  SidebarTitleBtnsWrapper,
   StyledDropdownItem,
   StyledDropdownMenu,
   StyledSearchInput,
   StyledSidebar,
-  StyledTooltip,
+  StyledTitle,
 } from "./Sidebar.styled";
 import ChatItem from "../ChatItem/ChatItem";
 import { selectChats } from "../../store/selectors";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiMoreVertical } from "react-icons/fi";
+import UserAuth from "../Header/UserAuth";
 
 const Sidebar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,7 +41,7 @@ const Sidebar = () => {
     }
   };
 
-  const handleDeleteChats = () => {
+  const handleDeleteChat = () => {
     if (window.confirm("Are you sure you want to delete all chats?")) {
       // Add logic to delete chats
     }
@@ -48,43 +51,49 @@ const Sidebar = () => {
     dispatch(logoutThunk());
   };
 
+  // Set the current chat when a chat is clicked
+  const handleSelectChat = (chatId) => {
+    dispatch(setCurrentChat(chatId)); // Dispatch the action to set the current chat
+  };
+
   return (
     <StyledSidebar>
-      <ActionsWrap>
-        <StyledTooltip>Your Chats</StyledTooltip>
-        <SidebarButtonsWrapper>
-          <SidebarButton onClick={handleAddChat}>
-            <AiOutlinePlus size={20} />
-          </SidebarButton>
-          <SidebarButton onClick={() => setDropdownVisible(!dropdownVisible)}>
-            <FiMoreVertical size={20} />
-          </SidebarButton>
-          {dropdownVisible && (
-            <StyledDropdownMenu>
-              <StyledDropdownItem onClick={handleDeleteChats}>
-                Delete Chat
-              </StyledDropdownItem>
-              <StyledDropdownItem onClick={handleLogout}>
-                Logout
-              </StyledDropdownItem>
-            </StyledDropdownMenu>
-          )}
-        </SidebarButtonsWrapper>
-      </ActionsWrap>
-      <StyledSearchInput
-        type="text"
-        placeholder="Search chats"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <SidebarActionsWrap>
+        <UserAuth />
+        <SidebarTitleBtnsWrapper>
+          <StyledTitle>Your Chats</StyledTitle>
+          <SidebarButtonsWrapper>
+            <SidebarButton onClick={handleAddChat}>
+              <AiOutlinePlus size={20} />
+            </SidebarButton>
+            <SidebarButton onClick={() => setDropdownVisible(!dropdownVisible)}>
+              <FiMoreVertical size={20} />
+            </SidebarButton>
+            {dropdownVisible && (
+              <StyledDropdownMenu>
+                <StyledDropdownItem onClick={handleLogout}>
+                  Logout
+                </StyledDropdownItem>
+              </StyledDropdownMenu>
+            )}
+          </SidebarButtonsWrapper>
+        </SidebarTitleBtnsWrapper>
+        <StyledSearchInput
+          type="text"
+          placeholder="Search chats"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </SidebarActionsWrap>
+
       <ul>
         {filteredChats.length > 0 ? (
           filteredChats.map((chat) => (
             <ChatItem
               key={chat._id}
-              chatName={chat.name}
-              iconSrc={chat.icon || "/icons/default.png"}
-              onClick={() => console.log(`Selected chat: ${chat.name}`)}
+              chat={chat}
+              onSelect={() => handleSelectChat(chat._id)} // Pass the onSelect handler
+              onDelete={handleDeleteChat}
             />
           ))
         ) : (

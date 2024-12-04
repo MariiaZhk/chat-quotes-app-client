@@ -30,7 +30,7 @@ export const fetchChatsThunk = createAsyncThunk(
   }
 );
 
-export const sendMessageThunk = createAsyncThunk(
+export const getQuoteThunk = createAsyncThunk(
   "chats/sendMessage",
   async (message, thunkAPI) => {
     try {
@@ -39,7 +39,9 @@ export const sendMessageThunk = createAsyncThunk(
       if (data.results.length === 0) {
         return thunkAPI.rejectWithValue("No quotes found");
       }
-      return data.results;
+      const randomQuote =
+        data.results[Math.floor(Math.random() * data.results.length)];
+      return randomQuote;
     } catch (error) {
       toast.error("Error fetching quotes: " + error.message);
       return thunkAPI.rejectWithValue(error.message);
