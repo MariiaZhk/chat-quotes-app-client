@@ -16,6 +16,12 @@ export const SidebarActionsWrap = styled.div`
   gap: 10px;
   padding: 10px;
 `;
+export const UserAuthWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+`;
 export const SidebarTitleBtnsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -34,16 +40,14 @@ export const SidebarButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 36px;
-  height: 36px;
   background-color: transparent;
   box-shadow: none;
-  border: none;
-  cursor: pointer;
+  color: var(--secondary-text);
 
   &:hover,
   &:focus {
     background-color: transparent;
+    color: var(--accent-text);
   }
 
   svg {
@@ -54,38 +58,6 @@ export const SidebarButton = styled.button`
     &:focus {
       color: var(--accent-text);
     }
-  }
-`;
-
-export const StyledDropdownMenu = styled.div`
-  position: absolute;
-  top: 40px;
-  right: 0;
-  background-color: #ffffff;
-  box-shadow: var(--shadow);
-
-  border-radius: 5px;
-  width: 150px;
-  z-index: 1000;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -8px;
-    right: 10px;
-    border-width: 0 8px 8px 8px;
-    border-style: solid;
-    border-color: transparent transparent #ffffff transparent;
-  }
-`;
-
-export const StyledDropdownItem = styled.div`
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 14px;
-
-  &:hover {
-    background-color: var(--light-grey);
   }
 `;
 

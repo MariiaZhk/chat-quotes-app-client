@@ -1,30 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutThunk } from "../../store/Auth/operations";
 import { addChatThunk, fetchChatsThunk } from "../../store/Chat/operations";
-import { setCurrentChat } from "../../store/Chat/chatSlice"; // Import setCurrentChat
+import { setCurrentChat } from "../../store/Chat/chatSlice";
 import {
   SidebarActionsWrap,
   SidebarButton,
-  SidebarButtonsWrapper,
   SidebarTitleBtnsWrapper,
-  StyledDropdownItem,
-  StyledDropdownMenu,
   StyledSearchInput,
   StyledSidebar,
   StyledTitle,
+  UserAuthWrap,
 } from "./Sidebar.styled";
 import ChatItem from "../ChatItem/ChatItem";
 import { selectChats } from "../../store/selectors";
 import { AiOutlinePlus } from "react-icons/ai";
-import { FiMoreVertical } from "react-icons/fi";
+import Dialog from "../Dialog/Dialog";
 import UserAuth from "../Header/UserAuth";
+import { DialogBtnContainer } from "../Dialog/Dialog.styled";
+import { closeDialog, openDialog } from "../../store/Global/globalSlice";
+import { selectOpenDialogId } from "../../store/Global/selectors";
 
 const Sidebar = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [logoutDialogPosition, setLogoutDialogPosition] = useState(null);
+  const logoutButtonRef = useRef(null);
   const dispatch = useDispatch();
   const chats = useSelector(selectChats);
+  const openDialogId = useSelector(selectOpenDialogId);
 
   useEffect(() => {
     dispatch(fetchChatsThunk());
@@ -41,42 +44,49 @@ const Sidebar = () => {
     }
   };
 
-  const handleDeleteChat = () => {
-    if (window.confirm("Are you sure you want to delete all chats?")) {
-      // Add logic to delete chats
-    }
-  };
-
   const handleLogout = () => {
     dispatch(logoutThunk());
   };
 
-  // Set the current chat when a chat is clicked
-  const handleSelectChat = (chatId) => {
-    dispatch(setCurrentChat(chatId)); // Dispatch the action to set the current chat
+  const openLogoutDialog = (e) => {
+    e.stopPropagation();
+    if (openDialogId === "logoutDialog") {
+      closeLogoutDialog();
+    } else {
+      if (logoutButtonRef.current) {
+        const rect = logoutButtonRef.current.getBoundingClientRect();
+        setLogoutDialogPosition({
+          top: rect.top + window.scrollY + 40,
+          left: rect.left + window.scrollX,
+        });
+      }
+      dispatch(openDialog("logoutDialog"));
+    }
+  };
+
+  const closeLogoutDialog = () => {
+    dispatch(closeDialog());
   };
 
   return (
     <StyledSidebar>
       <SidebarActionsWrap>
-        <UserAuth />
+        <UserAuthWrap>
+          <UserAuth />
+          <SidebarButton
+            ref={logoutButtonRef}
+            onMouseDown={openLogoutDialog}
+            onMouseUp={(e) => e.preventDefault()}
+          >
+            Logout
+          </SidebarButton>
+        </UserAuthWrap>
+
         <SidebarTitleBtnsWrapper>
-          <StyledTitle>Your Chats</StyledTitle>
-          <SidebarButtonsWrapper>
-            <SidebarButton onClick={handleAddChat}>
-              <AiOutlinePlus size={20} />
-            </SidebarButton>
-            <SidebarButton onClick={() => setDropdownVisible(!dropdownVisible)}>
-              <FiMoreVertical size={20} />
-            </SidebarButton>
-            {dropdownVisible && (
-              <StyledDropdownMenu>
-                <StyledDropdownItem onClick={handleLogout}>
-                  Logout
-                </StyledDropdownItem>
-              </StyledDropdownMenu>
-            )}
-          </SidebarButtonsWrapper>
+          <StyledTitle>Chats</StyledTitle>
+          <SidebarButton onClick={handleAddChat}>
+            <AiOutlinePlus size={20} />
+          </SidebarButton>
         </SidebarTitleBtnsWrapper>
         <StyledSearchInput
           type="text"
@@ -92,14 +102,26 @@ const Sidebar = () => {
             <ChatItem
               key={chat._id}
               chat={chat}
-              onSelect={() => handleSelectChat(chat._id)} // Pass the onSelect handler
-              onDelete={handleDeleteChat}
+              onSelect={() => dispatch(setCurrentChat(chat._id))}
+              onRename={() => console.log("Rename chat not implemented yet")}
             />
           ))
         ) : (
           <li>No chats found</li>
         )}
       </ul>
+
+      <Dialog
+        isOpen={openDialogId === "logoutDialog"}
+        onClose={closeLogoutDialog}
+        position={logoutDialogPosition}
+      >
+        <p>Are you sure you want to logout?</p>
+        <DialogBtnContainer>
+          <button onClick={handleLogout}>Yes</button>
+          <button onClick={closeLogoutDialog}>No</button>
+        </DialogBtnContainer>
+      </Dialog>
     </StyledSidebar>
   );
 };

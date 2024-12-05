@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { nanoid } from "nanoid"; // Імпортуємо nanoid
 import {
   StyledChatArea,
   Message,
@@ -7,10 +8,9 @@ import {
   MessageList,
   ChatAreaHead,
 } from "./ChatArea.styled";
-import { getQuoteThunk } from "../../store/Chat/operations";
+import { getQuoteThunk, sendMessageThunk } from "../../store/Chat/operations";
 import { selectCurrentChat } from "../../store/selectors";
 import { ChatItemIcon, ChatItemName } from "../ChatItem/ChatItem.styled";
-import { addMessage } from "../../store/Chat/chatSlice";
 
 const ChatArea = () => {
   const [message, setMessage] = useState("");
@@ -19,39 +19,53 @@ const ChatArea = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!message.trim()) return;
+    if (!message.trim() || !currentChat) return;
 
     const userMessage = {
-      _id: `local-${Date.now()}`,
       content: message,
-      author: "You",
-      createdAt: new Date().toISOString(),
+      sender: "You",
+      _id: nanoid(),
+      timestamp: new Date().toISOString(),
     };
 
-    // Додати повідомлення користувача в Redux
-    dispatch(addMessage(userMessage)); // Redux action
+    // Надіслати повідомлення користувача на бекенд
+    dispatch(
+      sendMessageThunk({
+        messageContent: userMessage.content,
+        senderId: userMessage.sender,
+      })
+    );
+    setMessage("");
 
-    setMessage(""); // Очистити поле вводу
+    try {
+      // Отримати цитату з Quotable API
+      const quoteAction = dispatch(
+        getQuoteThunk(message) // Передаємо лише текстове повідомлення
+      );
 
-    // Автовідповідь через 3 секунди
-    setTimeout(async () => {
-      const resultAction = await dispatch(getQuoteThunk(message));
-      if (getQuoteThunk.fulfilled.match(resultAction)) {
-        const fetchedQuote = resultAction.payload;
+      if (quoteAction.type === "chats/getQuotes/fulfilled") {
+        const fetchedQuote = quoteAction.payload;
 
         const autoResponse = {
-          _id: `quote-${Date.now()}`,
           content: fetchedQuote.content || "No quote found.",
-          author: fetchedQuote.author || "Unknown",
-          createdAt: new Date().toISOString(),
+          sender: fetchedQuote.author || "Unknown",
+          _id: nanoid(),
+          timestamp: new Date().toISOString(),
         };
 
-        // Додати відповідь у Redux
-        dispatch(addMessage(autoResponse));
-      } else if (getQuoteThunk.rejected.match(resultAction)) {
-        console.error(resultAction.payload);
+        dispatch(
+          sendMessageThunk({
+            messageContent: autoResponse.content,
+            senderId: autoResponse.sender,
+            isQuote: true,
+          })
+        );
+      } else {
+        console.error("No quote found:", quoteAction.payload);
       }
-    }, 3000);
+    } catch (error) {
+      console.error("Error fetching quote:", error);
+    }
   };
 
   return (
@@ -66,30 +80,41 @@ const ChatArea = () => {
           "Please select a chat"
         )}
       </ChatAreaHead>
+
       <MessageList>
-        {currentChat && currentChat.messages ? (
+        {currentChat && currentChat.messages?.length > 0 ? (
           currentChat.messages.map((msg) => (
-            <Message key={msg._id} isUserMessage={msg.author === "You"}>
+            <Message key={msg._id} $isUserMessage={msg.sender === "You"}>
               <p>
-                <strong>{msg.author}:</strong> {msg.content}
+                <strong>{msg.sender}:</strong> {msg.content}
               </p>
-              <small>{new Date(msg.createdAt).toLocaleString()}</small>
+              <small>{new Date(msg.timestamp).toLocaleString()}</small>
             </Message>
           ))
         ) : (
-          <Message>Please select a chat to start messaging.</Message>
+          <Message>No messages yet</Message>
         )}
       </MessageList>
+
       <MessageInput onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Type your message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          disabled={!currentChat}
+          aria-disabled={!currentChat}
         />
-        <button type="submit">Send</button>
+        <button
+          type="submit"
+          disabled={!currentChat || !message.trim()}
+          aria-disabled={!currentChat || !message.trim()}
+        >
+          Send
+        </button>
       </MessageInput>
     </StyledChatArea>
   );
 };
+
 export default ChatArea;

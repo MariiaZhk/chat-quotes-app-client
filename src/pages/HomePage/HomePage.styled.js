@@ -7,6 +7,7 @@ export const StyledWrapper = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
+  padding: 10px;
 `;
 
 export const StyledMain = styled.main`

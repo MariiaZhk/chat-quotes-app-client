@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addChatThunk, fetchChatsThunk, getQuoteThunk } from "./operations"; // Define thunks for fetching, creating chats, sending messages
+import {
+  addChatThunk,
+  fetchChatsThunk,
+  getQuoteThunk,
+  sendMessageThunk,
+} from "./operations";
 
 export const chatSlice = createSlice({
   name: "chat",
@@ -8,7 +13,7 @@ export const chatSlice = createSlice({
     currentChat: {
       _id: null,
       name: "",
-      messages: [], // Initialize messages as an empty array
+      messages: [],
     },
     isLoading: false,
     isError: null,
@@ -17,11 +22,11 @@ export const chatSlice = createSlice({
     setCurrentChat: (state, { payload }) => {
       state.currentChat = state.chats.find((chat) => chat._id === payload);
     },
-    addMessage: (state, { payload }) => {
-      if (state.currentChat) {
-        state.currentChat.messages.push(payload);
-      }
-    },
+    // addMessage: (state, { payload }) => {
+    //   if (state.currentChat) {
+    //     state.currentChat.messages.push(payload);
+    //   }
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -52,18 +57,26 @@ export const chatSlice = createSlice({
         state.isLoading = false;
         state.isError = payload;
       })
-      .addCase(getQuoteThunk.pending, (state) => {
+      .addCase(sendMessageThunk.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getQuoteThunk.fulfilled, (state, { payload }) => {
+      .addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
+        const { chatId, message } = payload;
+        const chat = state.chats.find((c) => c._id === chatId);
+        if (chat) {
+          chat.messages.push(message);
+        }
+        if (state.currentChat && state.currentChat._id === chatId) {
+          state.currentChat.messages.push(message);
+        }
+      })
+      .addCase(sendMessageThunk.rejected, (state, { payload }) => {
         state.isLoading = false;
+        state.isError = payload;
+      })
+      .addCase(getQuoteThunk.fulfilled, (state, { payload }) => {
         if (state.currentChat) {
-          state.currentChat.messages.push({
-            _id: `quote-${Date.now()}`,
-            content: payload.content,
-            author: payload.author,
-            createdAt: new Date().toISOString(),
-          });
+          state.currentChat.messages.push(payload);
         }
       })
       .addCase(getQuoteThunk.rejected, (state, { payload }) => {
@@ -73,6 +86,6 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { setCurrentChat, addMessage } = chatSlice.actions;
+export const { setCurrentChat } = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

@@ -12,6 +12,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { chatReducer } from "./Chat/chatSlice";
+import { globalReducer } from "./Global/globalSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -25,14 +26,24 @@ const chatPersistConfig = {
   storage,
   whitelist: ["chats"],
 };
+const persistGlobalConfig = {
+  key: "global",
+  storage,
+  whitelist: [],
+};
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 const persistedChatReducer = persistReducer(chatPersistConfig, chatReducer);
+const persistedGlobalReducer = persistReducer(
+  persistGlobalConfig,
+  globalReducer
+);
 
 export const store = configureStore({
   reducer: {
     authSlice: persistedAuthReducer,
     chatSlice: persistedChatReducer,
+    globalSlice: persistedGlobalReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
