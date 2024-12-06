@@ -1,34 +1,17 @@
-import React, { useEffect } from "react";
+// src/components/Dialog/Dialog.js
+import React, { useRef } from "react";
 import { StyledDialog } from "./Dialog.styled";
-
+import { useDialogClose } from "../../hooks/useDialogClose";
 const Dialog = ({ isOpen, onClose, position, children }) => {
-  const clickOutside = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
+  const dialogRef = useRef(null);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  useDialogClose({ isOpen, onClose });
 
   return (
     <>
       {isOpen && (
         <StyledDialog
-          onMouseDown={clickOutside}
+          ref={dialogRef}
           style={{
             top: position?.top || "auto",
             left: position?.left || "auto",

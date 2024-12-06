@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import ReactDom from "react-dom";
 
 import {
@@ -9,8 +9,11 @@ import {
 } from "./ModalWindow.styled";
 
 import sprite from "../../assets/sprite.svg";
+import { useDialogClose } from "../../hooks/useDialogClose";
 
 const ModalWindow = ({ onClose, children }) => {
+  useDialogClose({ isOpen: true, onClose });
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -18,27 +21,8 @@ const ModalWindow = ({ onClose, children }) => {
     };
   }, []);
 
-  const clickOutside = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
-
   return ReactDom.createPortal(
-    <ModalWrapper onMouseDown={clickOutside}>
+    <ModalWrapper>
       <ModalContent>
         {children}
         <ModalButtonClose onClick={onClose}>
