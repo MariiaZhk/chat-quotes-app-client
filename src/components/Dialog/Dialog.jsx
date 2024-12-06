@@ -1,46 +1,43 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { StyledDialog } from "./Dialog.styled";
 
 const Dialog = ({ isOpen, onClose, position, children }) => {
-  const dialogRef = useRef(null);
+  const clickOutside = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (
-        isOpen &&
-        dialogRef.current &&
-        !dialogRef.current.contains(e.target)
-      ) {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
         onClose();
       }
     };
 
-    const handleEscapePress = (e) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-    document.addEventListener("keydown", handleEscapePress);
+    if (isOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
 
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-      document.removeEventListener("keydown", handleEscapePress);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
 
   return (
-    <StyledDialog
-      ref={dialogRef}
-      style={{
-        top: position?.top || "auto",
-        left: position?.left || "auto",
-        display: isOpen ? "block" : "none",
-      }}
-    >
-      {children}
-    </StyledDialog>
+    <>
+      {isOpen && (
+        <StyledDialog
+          onMouseDown={clickOutside}
+          style={{
+            top: position?.top || "auto",
+            left: position?.left || "auto",
+          }}
+        >
+          {children}
+        </StyledDialog>
+      )}
+    </>
   );
 };
 

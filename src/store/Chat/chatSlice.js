@@ -15,8 +15,6 @@ export const chatSlice = createSlice({
       name: "",
       messages: [],
     },
-    isLoading: false,
-    isError: null,
   },
   reducers: {
     setCurrentChat: (state, { payload }) => {
@@ -30,36 +28,17 @@ export const chatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addChatThunk.pending, (state) => {
-        state.isLoading = true;
-      })
       .addCase(addChatThunk.fulfilled, (state, { payload }) => {
         state.chats.push(payload);
-        state.isError = null;
-      })
-      .addCase(addChatThunk.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        state.isError = payload;
       })
 
-      .addCase(fetchChatsThunk.pending, (state) => {
-        state.isLoading = true;
-      })
       .addCase(fetchChatsThunk.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
         state.chats = payload;
         if (payload.length > 0) {
           state.currentChat = payload[0];
         }
-        state.isError = null;
       })
-      .addCase(fetchChatsThunk.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        state.isError = payload;
-      })
-      .addCase(sendMessageThunk.pending, (state) => {
-        state.isLoading = true;
-      })
+
       .addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
         const { chatId, message } = payload;
         const chat = state.chats.find((c) => c._id === chatId);
@@ -70,18 +49,11 @@ export const chatSlice = createSlice({
           state.currentChat.messages.push(message);
         }
       })
-      .addCase(sendMessageThunk.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        state.isError = payload;
-      })
+
       .addCase(getQuoteThunk.fulfilled, (state, { payload }) => {
         if (state.currentChat) {
           state.currentChat.messages.push(payload);
         }
-      })
-      .addCase(getQuoteThunk.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        state.isError = payload;
       });
   },
 });

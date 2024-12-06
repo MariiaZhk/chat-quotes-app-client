@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api, clearToken, setToken } from "../../configApi/configApi";
+import { authSlice } from "./authSlice";
 
 export const registerThunk = createAsyncThunk(
   "auth/register",
@@ -46,7 +47,7 @@ export const logoutThunk = createAsyncThunk(
 );
 
 export const refreshThunk = createAsyncThunk(
-  "auth/refresh",
+  "auth/current",
   async (_, thunkApi) => {
     const savedToken = thunkApi.getState().authSlice.token;
     if (savedToken) {
@@ -56,7 +57,7 @@ export const refreshThunk = createAsyncThunk(
     }
 
     try {
-      const { data } = await api.get("api/auth/current");
+      const { data } = await api.get("auth/current");
       return data;
     } catch (error) {
       toast.error(error.message);
@@ -64,3 +65,21 @@ export const refreshThunk = createAsyncThunk(
     }
   }
 );
+// export const getCurrentThunk = createAsyncThunk(
+//   "auth/refresh",
+//   async (_, thunkAPI) => {
+//     const state = thunkAPI.getState();
+//     const savedToken = state.user.token;
+//     if (savedToken) {
+//       setToken(savedToken);
+//     } else {
+//       return thunkAPI.rejectWithValue("No token!");
+//     }
+//     try {
+//       const response = await api.get("users/current");
+//       return response.data;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.message);
+//     }
+//   }
+// );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentChat } from "../../store/Chat/chatSlice";
-import { selectCurrentChat } from "../../store/selectors";
+import { selectCurrentChat } from "../../store/Chat/selectors";
 import Dialog from "../Dialog/Dialog";
 import {
   ChatItemIcon,

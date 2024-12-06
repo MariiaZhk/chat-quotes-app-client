@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import * as yup from "yup";
 import AuthForm from "../../components/AuthForm/AuthForm";
 import { loginThunk } from "../../store/Auth/operations";
-import { selectUserFirstName } from "../../store/selectors";
+import { selectUserFirstName } from "../../store/Auth/selectors";
 
 const schema = yup
   .object({
@@ -28,7 +28,7 @@ function SignInPage() {
     dispatch(loginThunk({ email: normalizedEmail, password }))
       .unwrap()
       .then(() => {
-        toast.success(`Welcome ${userName}`);
+        toast.success(`Welcome back ${userName}`);
       })
       .catch((err) => toast.error(err));
   };

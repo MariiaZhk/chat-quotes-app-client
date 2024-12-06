@@ -2,7 +2,10 @@ import { LuUserCircle2 } from "react-icons/lu";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectIsLogged, selectUserFirstName } from "../../store/selectors";
+import {
+  selectIsLogged,
+  selectUserFirstName,
+} from "../../store/Auth/selectors";
 
 export const StyledUserAuthWrapper = styled.div`
   display: flex;

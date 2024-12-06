@@ -5,6 +5,7 @@ import {
   refreshThunk,
   registerThunk,
 } from "./operations";
+import { setToken } from "../../configApi/configApi";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -16,11 +17,19 @@ export const authSlice = createSlice({
     },
     token: "",
     isLogged: false,
-    isLoading: false,
     isRefresh: false,
-    isError: null,
   },
-  reducers: {},
+  reducers: {
+    setStateToken: {
+      prepare: (token) => {
+        setToken(token);
+        return { payload: token };
+      },
+      reducer: (state, { payload }) => {
+        state.token = payload;
+      },
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -30,8 +39,6 @@ export const authSlice = createSlice({
         state.user.lastName = payload.lastName;
         state.token = payload.token;
         state.isLogged = true;
-        state.isLoading = false;
-        state.isError = null;
       })
 
       .addCase(registerThunk.rejected, (state, { payload }) => {
@@ -39,40 +46,25 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isError = payload;
       })
-      .addCase(loginThunk.rejected, (state) => {
-        state.isLogged = false;
-        state.isLoading = false;
-      })
-      .addCase(loginThunk.pending, (state) => {
-        state.isLoading = true;
-      })
+
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.user.email = payload.email;
         state.user.firstName = payload.firstName;
         state.user.lastName = payload.lastName;
         state.token = payload.token;
         state.isLogged = true;
-        state.isLoading = false;
       })
-      .addCase(logoutThunk.pending, (state) => {
-        state.isLoading = true;
+
+      .addCase(loginThunk.rejected, (state) => {
+        state.isLogged = false;
       })
       .addCase(logoutThunk.fulfilled, (state) => {
-        state.user = {
-          email: "",
-          firstName: "",
-          lastName: "",
-        };
-        state.token = "";
+        state.user = { email: "", firstName: "", lastName: "" };
         state.isLogged = false;
-        state.isLoading = false;
+        state.token = "";
       })
-      .addCase(logoutThunk.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        state.isError = payload;
-      })
+
       .addCase(refreshThunk.pending, (state) => {
-        state.isLoading = true;
         state.isLogged = true;
         state.isRefresh = true;
       })
@@ -81,15 +73,13 @@ export const authSlice = createSlice({
         state.user.firstName = payload.firstName;
         state.user.lastName = payload.lastName;
         state.isLogged = true;
-        state.isLoading = false;
         state.isRefresh = false;
       })
       .addCase(refreshThunk.rejected, (state) => {
-        state.isLogged = false;
-        state.isLoading = false;
         state.isRefresh = false;
       });
   },
 });
 
 export const authReducer = authSlice.reducer;
+export const { setStateToken } = authSlice.actions;

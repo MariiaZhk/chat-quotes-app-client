@@ -13,7 +13,7 @@ import {
   UserAuthWrap,
 } from "./Sidebar.styled";
 import ChatItem from "../ChatItem/ChatItem";
-import { selectChats } from "../../store/selectors";
+import { selectChats } from "../../store/Chat/selectors";
 import { AiOutlinePlus } from "react-icons/ai";
 import Dialog from "../Dialog/Dialog";
 import UserAuth from "../Header/UserAuth";
@@ -118,8 +118,21 @@ const Sidebar = () => {
       >
         <p>Are you sure you want to logout?</p>
         <DialogBtnContainer>
-          <button onClick={handleLogout}>Yes</button>
-          <button onClick={closeLogoutDialog}>No</button>
+          <button
+            onClick={() => {
+              handleLogout();
+              closeLogoutDialog();
+            }}
+          >
+            Yes
+          </button>
+          <button
+            onClick={() => {
+              closeLogoutDialog();
+            }}
+          >
+            No
+          </button>
         </DialogBtnContainer>
       </Dialog>
     </StyledSidebar>

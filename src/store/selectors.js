@@ -1,6 +1,0 @@
-export const selectIsLogged = (state) => state.authSlice.isLogged;
-export const selectIsLoading = (state) => state.authSlice.isLoading;
-export const selectIsRefresh = (state) => state.authSlice.isRefresh;
-export const selectUserFirstName = (state) => state.authSlice.user.firstName;
-export const selectCurrentChat = (state) => state.chatSlice.currentChat;
-export const selectChats = (state) => state.chatSlice.chats;

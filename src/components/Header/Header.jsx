@@ -1,4 +1,4 @@
-import { selectIsLogged } from "../../store/selectors";
+import { selectIsLogged } from "../../store/Auth/selectors";
 import { useSelector } from "react-redux";
 import { StyledUserAuthLink, StyledWrapper } from "./Header.styled";
 import logo from "../../assets/Logo.png";

@@ -6,13 +6,22 @@ import PrivateRoute from "./routesConfig/PrivateRoute";
 import HomePage from "./pages/HomePage/HomePage";
 import SignInPage from "./pages/SignInPage/SignInPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
-import { useSelector } from "react-redux";
-import { selectIsLoading, selectIsRefresh } from "./store/selectors";
+import { useDispatch, useSelector } from "react-redux";
+
 import Loader from "./components/Loader/Loader";
+import { selectIsLoading } from "./store/Global/selectors";
+import { selectIsRefresh } from "./store/Auth/selectors";
+import { useEffect } from "react";
+import { refreshThunk } from "./store/Auth/operations";
 
 function App() {
   const isLoading = useSelector(selectIsLoading);
   const isRefresh = useSelector(selectIsRefresh);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(refreshThunk());
+  }, [dispatch]);
   return isRefresh ? (
     <Loader visible={isLoading} />
   ) : (

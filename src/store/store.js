@@ -22,7 +22,6 @@ const authPersistConfig = {
 };
 const chatPersistConfig = {
   key: "chat",
-  version: 1,
   storage,
   whitelist: ["chats"],
 };

@@ -9,7 +9,7 @@ import {
   ChatAreaHead,
 } from "./ChatArea.styled";
 import { getQuoteThunk, sendMessageThunk } from "../../store/Chat/operations";
-import { selectCurrentChat } from "../../store/selectors";
+import { selectCurrentChat } from "../../store/Chat/selectors";
 import { ChatItemIcon, ChatItemName } from "../ChatItem/ChatItem.styled";
 
 const ChatArea = () => {
