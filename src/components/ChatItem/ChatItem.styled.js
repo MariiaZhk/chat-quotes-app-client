@@ -33,23 +33,12 @@ export const ChatItemName = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
-// export const ChevronIconWrapper = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   cursor: pointer;
-// `;
 export const ChevronIconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 5px; /* Збільшуємо область для кліку */
-  border-radius: 50%; /* Додаємо закруглені краї, щоб зробити область більш помітною */
-  background-color: ${({ $isSelected }) =>
-    $isSelected ? "#d3d3d3" : "transparent"}; /* Змінюємо фон при виборі */
 
-  &:hover {
-    color: var(--accent-text); /* Змінюємо фон на ховер */
-  }
+  /* &:hover {
+    color: orange; /* Change icon color to orange on hover */
 `;

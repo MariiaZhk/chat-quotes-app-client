@@ -1,61 +1,65 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentChat } from "../../store/Chat/chatSlice";
-import { selectCurrentChat } from "../../store/Chat/selectors";
+import { closeDialog, openDialog } from "../../store/Global/globalSlice";
+import { selectOpenDialogId } from "../../store/Global/selectors";
+import { removeChatThunk } from "../../store/Chat/operations";
 import Dialog from "../Dialog/Dialog";
+import UpdateChatModal from "../UpdateChatModal/UpdateChatModal";
+import DeleteConfirmationModal from "../DeleteChatConfirmModal/DeleteChatConfirmModal";
 import {
+  ChatItemStyled,
   ChatItemIcon,
   ChatItemName,
-  ChatItemStyled,
   ChevronIconWrapper,
 } from "./ChatItem.styled";
 import { FiChevronDown } from "react-icons/fi";
+import { toast } from "react-toastify";
+import { setCurrentChat } from "../../store/Chat/chatSlice";
+import { selectCurrentChat } from "../../store/Chat/selectors";
 import { DialogBtnContainer } from "../Dialog/Dialog.styled";
-import { selectOpenDialogId } from "../../store/Global/selectors";
-import { closeDialog, openDialog } from "../../store/Global/globalSlice";
 
-const ChatItem = ({ chat, onRename }) => {
+const ChatItem = ({ chat }) => {
   const dispatch = useDispatch();
   const openDialogId = useSelector(selectOpenDialogId);
   const [dialogPosition, setDialogPosition] = useState(null);
   const currentChat = useSelector(selectCurrentChat);
+  const isSelected = chat._id === currentChat?._id;
+  const chevronButtonRef = useRef(null);
 
-  const handleOpenDialog = (e) => {
+  const handleOpenDialog = (e, type) => {
     e.stopPropagation();
-    const dialogId = `chatDialog-${chat._id}`;
+    const dialogId = `dialog-${type}-${chat._id}`;
     if (openDialogId === dialogId) {
       dispatch(closeDialog());
     } else {
-      const rect = e.currentTarget.getBoundingClientRect();
+      const rect = chevronButtonRef.current.getBoundingClientRect();
       setDialogPosition({
         top: rect.bottom + window.scrollY,
         left: rect.left + window.scrollX,
       });
-      dispatch(openDialog(dialogId));
+      dispatch(openDialog({ id: dialogId, meta: { chatId: chat._id } }));
     }
   };
 
-  const handleCloseDialog = () => {
-    dispatch(closeDialog());
-  };
+  const handleCloseDialog = () => dispatch(closeDialog());
 
   const handleSelectChat = () => {
     dispatch(setCurrentChat(chat._id));
   };
 
-  const handleRename = () => {
-    const newName = prompt("Enter a new chat name:", chat.name);
-    if (newName && newName.trim()) {
-      onRename(chat._id, newName.trim());
-    }
-    handleCloseDialog();
+  const handleConfirmDelete = () => {
+    dispatch(removeChatThunk(chat._id))
+      .unwrap()
+      .then(() => {
+        toast.success("Chat deleted successfully!");
+        dispatch(closeDialog()); // Close the dialog after deletion
+      })
+      .catch((error) => {
+        toast.error(
+          `Failed to delete chat: ${error.message || "Unknown error"}`
+        );
+      });
   };
-
-  const handleDelete = () => {
-    handleCloseDialog();
-  };
-
-  const isSelected = chat._id === currentChat?._id;
 
   return (
     <>
@@ -63,24 +67,34 @@ const ChatItem = ({ chat, onRename }) => {
         <ChatItemIcon src="../../assets/Logo.png" alt="Chat Icon" />
         <ChatItemName>{chat.name}</ChatItemName>
         <ChevronIconWrapper
-          onMouseDown={handleOpenDialog}
-          onMouseUp={(e) => e.preventDefault()}
+          onClick={(e) => handleOpenDialog(e, "main")}
+          ref={chevronButtonRef}
         >
           <FiChevronDown size={24} />
         </ChevronIconWrapper>
       </ChatItemStyled>
 
       <Dialog
-        isOpen={openDialogId === `chatDialog-${chat._id}`}
+        isOpen={openDialogId === `dialog-main-${chat._id}`}
         onClose={handleCloseDialog}
         position={dialogPosition}
       >
-        <p>Manage Chat: {chat.name}</p>
         <DialogBtnContainer>
-          <button onClick={handleRename}>Rename Chat</button>
-          <button onClick={handleDelete}>Delete Chat</button>
+          <button onClick={(e) => handleOpenDialog(e, "rename")}>Rename</button>
+          <button onClick={(e) => handleOpenDialog(e, "delete")}>Delete</button>
         </DialogBtnContainer>
       </Dialog>
+
+      <UpdateChatModal
+        isOpen={openDialogId === `dialog-rename-${chat._id}`}
+        onClose={handleCloseDialog}
+        chat={chat}
+      />
+      <DeleteConfirmationModal
+        isOpen={openDialogId === `dialog-delete-${chat._id}`}
+        onClose={handleCloseDialog}
+        onDelete={handleConfirmDelete}
+      />
     </>
   );
 };

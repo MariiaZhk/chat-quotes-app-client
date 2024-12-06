@@ -1,11 +1,11 @@
-// src/components/Dialog/Dialog.js
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { StyledDialog } from "./Dialog.styled";
 import { useDialogClose } from "../../hooks/useDialogClose";
+
 const Dialog = ({ isOpen, onClose, position, children }) => {
   const dialogRef = useRef(null);
 
-  useDialogClose({ isOpen, onClose });
+  useDialogClose({ isOpen, onClose, dialogRef });
 
   return (
     <>

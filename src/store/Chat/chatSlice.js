@@ -3,7 +3,9 @@ import {
   addChatThunk,
   fetchChatsThunk,
   getQuoteThunk,
+  removeChatThunk,
   sendMessageThunk,
+  updateChatThunk,
 } from "./operations";
 
 export const chatSlice = createSlice({
@@ -36,6 +38,25 @@ export const chatSlice = createSlice({
         state.chats = payload;
         if (payload.length > 0) {
           state.currentChat = payload[0];
+        }
+      })
+      .addCase(updateChatThunk.fulfilled, (state, { payload }) => {
+        const index = state.chats.findIndex((chat) => chat._id === payload._id);
+        if (index !== -1) {
+          state.chats[index] = payload;
+        }
+        if (state.currentChat._id === payload._id) {
+          state.currentChat = payload; // Update the current chat as well
+        }
+      })
+      .addCase(removeChatThunk.fulfilled, (state, { payload }) => {
+        state.chats = state.chats.filter((chat) => chat._id !== payload);
+        if (state.currentChat._id === payload) {
+          state.currentChat = {
+            _id: null,
+            name: "",
+            messages: [],
+          };
         }
       })
 

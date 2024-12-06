@@ -4,26 +4,28 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
-  Form,
   ErrorSpan,
-  FormBtn,
-  FormHeading,
-  FormLabel,
   PassShowBtn,
-  StyledInput,
   StyledSection,
   BtnLink,
+  FormContainer,
 } from "../../components/AuthForm/AuthForm.styled";
 import PassEye from "../../assets/PassEye";
 import OpenPassEye from "../../assets/OpenPassEye";
+import {
+  Form,
+  FormBtn,
+  FormHeading,
+  FormInput,
+  FormLabel,
+} from "../CommonStyledComponents/CommonStyledComponents";
 
 function AuthForm({ type, onSubmit, schema }) {
   const [eyePass, setEyePass] = useState({
     password: false,
     repPassword: false,
   });
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const path = type === "signup" ? "/signin" : "/signup";
 
   const {
@@ -41,109 +43,91 @@ function AuthForm({ type, onSubmit, schema }) {
 
   return (
     <StyledSection>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormHeading>{type === "signup" ? "Sign Up" : "Sign In"}</FormHeading>
+      <FormContainer>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <FormHeading>{type === "signup" ? "Sign Up" : "Sign In"}</FormHeading>
 
-        {type === "signup" && (
-          <>
-            <FormLabel>
-              <StyledInput
-                type="text"
-                placeholder="First Name"
-                name="firstName"
-                {...register("firstName")}
-                $error={!!errors?.firstName}
-              />
-              {errors?.firstName && (
-                <ErrorSpan>{errors?.firstName?.message}</ErrorSpan>
-              )}
-            </FormLabel>
+          {type === "signup" && (
+            <>
+              <FormLabel>
+                <FormInput
+                  type="text"
+                  placeholder="First Name"
+                  name="firstName"
+                  {...register("firstName")}
+                  $error={!!errors?.firstName}
+                />
+                {errors?.firstName && (
+                  <ErrorSpan>{errors?.firstName?.message}</ErrorSpan>
+                )}
+              </FormLabel>
 
-            <FormLabel>
-              <StyledInput
-                type="text"
-                placeholder="Last Name"
-                name="lastName"
-                {...register("lastName")}
-                $error={!!errors?.lastName}
-              />
-              {errors?.lastName && (
-                <ErrorSpan>{errors?.lastName?.message}</ErrorSpan>
-              )}
-            </FormLabel>
-          </>
-        )}
-
-        <FormLabel>
-          <StyledInput
-            type="email"
-            placeholder="Email"
-            name="email"
-            {...register("email")}
-            $error={!!errors?.email}
-          />
-          {errors?.email && <ErrorSpan>{errors?.email?.message}</ErrorSpan>}
-        </FormLabel>
-
-        <FormLabel>
-          <StyledInput
-            type={eyePass.password ? "text" : "password"}
-            placeholder="Password"
-            name="password"
-            {...register("password")}
-            $error={!!errors?.password}
-          />
-          {errors?.password && (
-            <ErrorSpan>{errors?.password?.message}</ErrorSpan>
+              <FormLabel>
+                <FormInput
+                  type="text"
+                  placeholder="Last Name"
+                  name="lastName"
+                  {...register("lastName")}
+                  $error={!!errors?.lastName}
+                />
+                {errors?.lastName && (
+                  <ErrorSpan>{errors?.lastName?.message}</ErrorSpan>
+                )}
+              </FormLabel>
+            </>
           )}
-          <PassShowBtn
-            type="button"
-            onClick={() => togglePasswordVisibility("password")}
-          >
-            {eyePass.password ? <OpenPassEye /> : <PassEye />}
-          </PassShowBtn>
-        </FormLabel>
 
-        {/* {type === "signup" && (
           <FormLabel>
-            <StyledInput
-              type={eyePass.repPassword ? "text" : "password"}
-              placeholder="Repeat password"
-              name="repPassword"
-              {...register("repPassword")}
-              $error={!!errors?.repPassword}
+            <FormInput
+              type="email"
+              placeholder="Email"
+              name="email"
+              {...register("email")}
+              $error={!!errors?.email}
+              autoComplete="email"
             />
-            {errors?.repPassword && (
-              <ErrorSpan>{errors?.repPassword?.message}</ErrorSpan>
+            {errors?.email && <ErrorSpan>{errors?.email?.message}</ErrorSpan>}
+          </FormLabel>
+
+          <FormLabel>
+            <FormInput
+              type={eyePass.password ? "text" : "password"}
+              placeholder="Password"
+              name="password"
+              {...register("password")}
+              $error={!!errors?.password}
+              autoComplete="password"
+            />
+            {errors?.password && (
+              <ErrorSpan>{errors?.password?.message}</ErrorSpan>
             )}
             <PassShowBtn
               type="button"
-              onClick={() => togglePasswordVisibility("repPassword")}
+              onClick={() => togglePasswordVisibility("password")}
             >
-              {eyePass.repPassword ? <OpenPassEye /> : <PassEye />}
+              {eyePass.password ? <OpenPassEye /> : <PassEye />}
             </PassShowBtn>
           </FormLabel>
-        )} */}
-
-        <FormBtn type="submit">
-          {type === "signup" ? "Sign Up" : "Sign In"}
-        </FormBtn>
-        {type === "signup" ? (
-          <p>
-            Already have an account?{" "}
-            <BtnLink to={path}>
-              <strong>Sign In</strong>
-            </BtnLink>
-          </p>
-        ) : (
-          <p>
-            Don't have an account yet?{" "}
-            <BtnLink to={path}>
-              <strong>Sign Up</strong>
-            </BtnLink>
-          </p>
-        )}
-      </Form>
+          <FormBtn type="submit">
+            {type === "signup" ? "Sign Up" : "Sign In"}
+          </FormBtn>
+          {type === "signup" ? (
+            <p>
+              Already have an account?{" "}
+              <BtnLink to={path}>
+                <strong>Sign In</strong>
+              </BtnLink>
+            </p>
+          ) : (
+            <p>
+              Don't have an account yet?{" "}
+              <BtnLink to={path}>
+                <strong>Sign Up</strong>
+              </BtnLink>
+            </p>
+          )}
+        </Form>
+      </FormContainer>
     </StyledSection>
   );
 }

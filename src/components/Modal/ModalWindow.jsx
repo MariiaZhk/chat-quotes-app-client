@@ -1,34 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDom from "react-dom";
-
+import { AiOutlineClose } from "react-icons/ai";
 import {
   ModalButtonClose,
   ModalContent,
   ModalWrapper,
-  StyledIconWrapper,
 } from "./ModalWindow.styled";
 
-import sprite from "../../assets/sprite.svg";
-import { useDialogClose } from "../../hooks/useDialogClose";
-
 const ModalWindow = ({ onClose, children }) => {
-  useDialogClose({ isOpen: true, onClose });
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
-
   return ReactDom.createPortal(
-    <ModalWrapper>
+    <ModalWrapper onClick={(e) => e.target === e.currentTarget && onClose()}>
       <ModalContent>
         {children}
-        <ModalButtonClose onClick={onClose}>
-          <StyledIconWrapper>
-            <use href={`${sprite}#icon-close`} />
-          </StyledIconWrapper>
+        <ModalButtonClose onClick={onClose} aria-label="Close modal">
+          <AiOutlineClose size={24} />
         </ModalButtonClose>
       </ModalContent>
     </ModalWrapper>,

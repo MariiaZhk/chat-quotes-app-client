@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "nanoid"; // Імпортуємо nanoid
+import { nanoid } from "nanoid";
 import {
   StyledChatArea,
   Message,
@@ -28,7 +28,6 @@ const ChatArea = () => {
       timestamp: new Date().toISOString(),
     };
 
-    // Надіслати повідомлення користувача на бекенд
     dispatch(
       sendMessageThunk({
         messageContent: userMessage.content,
@@ -38,10 +37,7 @@ const ChatArea = () => {
     setMessage("");
 
     try {
-      // Отримати цитату з Quotable API
-      const quoteAction = dispatch(
-        getQuoteThunk(message) // Передаємо лише текстове повідомлення
-      );
+      const quoteAction = dispatch(getQuoteThunk(message));
 
       if (quoteAction.type === "chats/getQuotes/fulfilled") {
         const fetchedQuote = quoteAction.payload;

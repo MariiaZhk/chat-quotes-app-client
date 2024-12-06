@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutThunk } from "../../store/Auth/operations";
-import { addChatThunk, fetchChatsThunk } from "../../store/Chat/operations";
-import { setCurrentChat } from "../../store/Chat/chatSlice";
+import { AiOutlinePlus } from "react-icons/ai";
 import {
   SidebarActionsWrap,
   SidebarButton,
@@ -12,14 +10,17 @@ import {
   StyledTitle,
   UserAuthWrap,
 } from "./Sidebar.styled";
-import ChatItem from "../ChatItem/ChatItem";
-import { selectChats } from "../../store/Chat/selectors";
-import { AiOutlinePlus } from "react-icons/ai";
-import Dialog from "../Dialog/Dialog";
-import UserAuth from "../Header/UserAuth";
-import { DialogBtnContainer } from "../Dialog/Dialog.styled";
+import { fetchChatsThunk } from "../../store/Chat/operations";
+import { setCurrentChat } from "../../store/Chat/chatSlice";
+import { logoutThunk } from "../../store/Auth/operations";
 import { closeDialog, openDialog } from "../../store/Global/globalSlice";
 import { selectOpenDialogId } from "../../store/Global/selectors";
+import { selectChats } from "../../store/Chat/selectors";
+import ChatItem from "../ChatItem/ChatItem";
+import Dialog from "../Dialog/Dialog";
+import { DialogBtnContainer } from "../Dialog/Dialog.styled";
+import AddChatModal from "../AddChatModal/AddChatModal";
+import UserAuth from "../Header/UserAuth";
 
 const Sidebar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,42 +30,32 @@ const Sidebar = () => {
   const chats = useSelector(selectChats);
   const openDialogId = useSelector(selectOpenDialogId);
 
-  useEffect(() => {
-    dispatch(fetchChatsThunk());
-  }, [dispatch]);
-
   const filteredChats = chats.filter((chat) =>
     chat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddChat = () => {
-    const newChatName = prompt("Enter the name of the new chat:");
-    if (newChatName) {
-      dispatch(addChatThunk(newChatName));
-    }
+  useEffect(() => {
+    dispatch(fetchChatsThunk());
+  }, [dispatch]);
+
+  const handleOpenAddChatModal = () => {
+    dispatch(openDialog({ id: "dialog-add-chat" }));
   };
 
   const handleLogout = () => {
     dispatch(logoutThunk());
   };
 
-  const openLogoutDialog = (e) => {
-    e.stopPropagation();
-    if (openDialogId === "logoutDialog") {
-      closeLogoutDialog();
-    } else {
-      if (logoutButtonRef.current) {
-        const rect = logoutButtonRef.current.getBoundingClientRect();
-        setLogoutDialogPosition({
-          top: rect.top + window.scrollY + 40,
-          left: rect.left + window.scrollX,
-        });
-      }
-      dispatch(openDialog("logoutDialog"));
-    }
+  const openLogoutDialog = () => {
+    const rect = logoutButtonRef.current.getBoundingClientRect();
+    setLogoutDialogPosition({
+      top: rect.top + window.scrollY + 30,
+      left: rect.left + window.scrollX,
+    });
+    dispatch(openDialog({ id: "logoutDialog", meta: {} }));
   };
 
-  const closeLogoutDialog = () => {
+  const closeDialogs = () => {
     dispatch(closeDialog());
   };
 
@@ -73,21 +64,18 @@ const Sidebar = () => {
       <SidebarActionsWrap>
         <UserAuthWrap>
           <UserAuth />
-          <SidebarButton
-            ref={logoutButtonRef}
-            onMouseDown={openLogoutDialog}
-            onMouseUp={(e) => e.preventDefault()}
-          >
+          <SidebarButton ref={logoutButtonRef} onClick={openLogoutDialog}>
             Logout
           </SidebarButton>
         </UserAuthWrap>
 
         <SidebarTitleBtnsWrapper>
           <StyledTitle>Chats</StyledTitle>
-          <SidebarButton onClick={handleAddChat}>
+          <SidebarButton onClick={handleOpenAddChatModal}>
             <AiOutlinePlus size={20} />
           </SidebarButton>
         </SidebarTitleBtnsWrapper>
+
         <StyledSearchInput
           type="text"
           placeholder="Search chats"
@@ -103,7 +91,6 @@ const Sidebar = () => {
               key={chat._id}
               chat={chat}
               onSelect={() => dispatch(setCurrentChat(chat._id))}
-              onRename={() => console.log("Rename chat not implemented yet")}
             />
           ))
         ) : (
@@ -113,7 +100,7 @@ const Sidebar = () => {
 
       <Dialog
         isOpen={openDialogId === "logoutDialog"}
-        onClose={closeLogoutDialog}
+        onClose={closeDialogs}
         position={logoutDialogPosition}
       >
         <p>Are you sure you want to logout?</p>
@@ -121,20 +108,19 @@ const Sidebar = () => {
           <button
             onClick={() => {
               handleLogout();
-              closeLogoutDialog();
+              closeDialogs();
             }}
           >
             Yes
           </button>
-          <button
-            onClick={() => {
-              closeLogoutDialog();
-            }}
-          >
-            No
-          </button>
+          <button onClick={closeDialogs}>No</button>
         </DialogBtnContainer>
       </Dialog>
+
+      <AddChatModal
+        isOpen={openDialogId === "dialog-add-chat"}
+        onClose={closeDialogs}
+      />
     </StyledSidebar>
   );
 };

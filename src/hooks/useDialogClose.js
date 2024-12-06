@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 
-export const useDialogClose = ({ isOpen, onClose }) => {
+export const useDialogClose = ({
+  isOpen,
+  onClose,
+  dialogRef,
+  closeOnBackdrop = true,
+}) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -9,19 +14,23 @@ export const useDialogClose = ({ isOpen, onClose }) => {
     };
 
     const handleClickOutside = (e) => {
-      if (e.target === e.currentTarget) {
+      if (dialogRef?.current && !dialogRef.current.contains(e.target)) {
         onClose();
       }
     };
 
     if (isOpen) {
       document.addEventListener("keydown", handleKeyDown);
-      document.addEventListener("mousedown", handleClickOutside);
+      if (closeOnBackdrop) {
+        document.addEventListener("mousedown", handleClickOutside);
+      }
     }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("mousedown", handleClickOutside);
+      if (closeOnBackdrop) {
+        document.removeEventListener("mousedown", handleClickOutside);
+      }
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, dialogRef, closeOnBackdrop]);
 };

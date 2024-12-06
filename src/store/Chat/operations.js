@@ -30,6 +30,34 @@ export const fetchChatsThunk = createAsyncThunk(
   }
 );
 
+export const updateChatThunk = createAsyncThunk(
+  "chats/renameChat",
+  async ({ chatId, name }, thunkAPI) => {
+    try {
+      const { data } = await api.put(`/chats/${chatId}`, { name });
+      toast.success("Chat updated successfully!");
+      return data;
+    } catch (error) {
+      toast.error("Error updating chat: " + error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const removeChatThunk = createAsyncThunk(
+  "chats/removeChat",
+  async (chatId, thunkAPI) => {
+    try {
+      await api.delete(`/chats/${chatId}`);
+      toast.success("Chat removed successfully!");
+      return chatId;
+    } catch (error) {
+      toast.error("Error removing chat: " + error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 // export const getQuoteThunk = createAsyncThunk(
 //   "chats/getQuotes",
 //   async (message, thunkAPI) => {

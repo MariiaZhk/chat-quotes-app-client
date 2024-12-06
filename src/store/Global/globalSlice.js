@@ -9,13 +9,16 @@ import {
   addChatThunk,
   fetchChatsThunk,
   getQuoteThunk,
+  removeChatThunk,
   sendMessageThunk,
+  updateChatThunk,
 } from "../Chat/operations";
 
 const initialState = {
   isLoading: false,
   isError: null,
   openDialogId: null,
+  dialogMeta: {},
 };
 
 function handlePending(state) {
@@ -37,10 +40,12 @@ const globalSlice = createSlice({
   initialState,
   reducers: {
     openDialog: (state, { payload }) => {
-      state.openDialogId = payload;
+      state.openDialogId = payload.id;
+      state.dialogMeta = payload.meta || {};
     },
     closeDialog: (state) => {
       state.openDialogId = null;
+      state.dialogMeta = {};
     },
   },
   extraReducers: (builder) => {
@@ -53,12 +58,12 @@ const globalSlice = createSlice({
           refreshThunk.fulfilled,
           addChatThunk.fulfilled,
           fetchChatsThunk.fulfilled,
+          updateChatThunk.fulfilled,
+          removeChatThunk.fulfilled,
           sendMessageThunk.fulfilled,
           getQuoteThunk.fulfilled
         ),
-        (state) => {
-          handleFulfilled(state);
-        }
+        handleFulfilled
       )
       .addMatcher(
         isAnyOf(
@@ -68,12 +73,13 @@ const globalSlice = createSlice({
           refreshThunk.pending,
           addChatThunk.pending,
           fetchChatsThunk.pending,
+          updateChatThunk.pending,
+          removeChatThunk.pending,
           sendMessageThunk.pending,
           getQuoteThunk.pending
         ),
-        (state) => {
-          handlePending(state);
-        }
+
+        handlePending
       )
       .addMatcher(
         isAnyOf(
@@ -83,12 +89,13 @@ const globalSlice = createSlice({
           refreshThunk.rejected,
           addChatThunk.rejected,
           fetchChatsThunk.rejected,
+          updateChatThunk.rejected,
+          removeChatThunk.rejected,
           sendMessageThunk.rejected,
           getQuoteThunk.rejected
         ),
-        (state, { payload }) => {
-          handleRejected(state, payload);
-        }
+
+        handleRejected
       );
   },
 });
