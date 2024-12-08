@@ -3,5 +3,16 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/chatquo",
+  build: {
+    outDir: "dist",
+  },
+  resolve: {
+    alias: {
+      src: "/src",
+      components: "/src/components",
+      pages: "/src/pages",
+      assets: "/src/assets",
+    },
+  },
+  base: "/",
 });
