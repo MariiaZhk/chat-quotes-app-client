@@ -2,11 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   addChatThunk,
   fetchChatsThunk,
-  getQuoteThunk,
+  fetchQuoteThunk,
   removeChatThunk,
-  sendMessageThunk,
   updateChatThunk,
-} from "./operations";
+} from "./operations.js";
 
 export const chatSlice = createSlice({
   name: "chat",
@@ -20,20 +19,23 @@ export const chatSlice = createSlice({
   },
   reducers: {
     setCurrentChat: (state, { payload }) => {
-      state.currentChat = state.chats.find((chat) => chat._id === payload);
+      state.currentChat = payload;
     },
-    // addMessage: (state, { payload }) => {
-    //   if (state.currentChat) {
-    //     state.currentChat.messages.push(payload);
-    //   }
-    // },
+    updateChatMessages: (state, { payload }) => {
+      const chat = state.chats.find((chat) => chat._id === payload.chatId);
+      if (chat) {
+        chat.messages = payload.messages;
+        if (state.currentChat._id === payload.chatId) {
+          state.currentChat.messages = payload.messages;
+        }
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(addChatThunk.fulfilled, (state, { payload }) => {
         state.chats.push(payload);
       })
-
       .addCase(fetchChatsThunk.fulfilled, (state, { payload }) => {
         state.chats = payload;
         if (payload.length > 0) {
@@ -46,39 +48,25 @@ export const chatSlice = createSlice({
           state.chats[index] = payload;
         }
         if (state.currentChat._id === payload._id) {
-          state.currentChat = payload; // Update the current chat as well
+          state.currentChat = payload; // Update current chat
         }
       })
       .addCase(removeChatThunk.fulfilled, (state, { payload }) => {
         state.chats = state.chats.filter((chat) => chat._id !== payload);
         if (state.currentChat._id === payload) {
-          state.currentChat = {
-            _id: null,
-            name: "",
-            messages: [],
-          };
+          state.currentChat =
+            state.chats.length > 0
+              ? state.chats[0]
+              : { _id: null, name: "", messages: [] };
         }
       })
-
-      .addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
-        const { chatId, message } = payload;
-        const chat = state.chats.find((c) => c._id === chatId);
-        if (chat) {
-          chat.messages.push(message);
-        }
-        if (state.currentChat && state.currentChat._id === chatId) {
-          state.currentChat.messages.push(message);
-        }
-      })
-
-      .addCase(getQuoteThunk.fulfilled, (state, { payload }) => {
-        if (state.currentChat) {
-          state.currentChat.messages.push(payload);
-        }
+      .addCase(fetchQuoteThunk.fulfilled, (state, { payload }) => {
+        const newMessages = [...state.currentChat.messages, payload];
+        state.currentChat.messages = newMessages;
       });
   },
 });
 
-export const { setCurrentChat } = chatSlice.actions;
+export const { setCurrentChat, updateChatMessages } = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

@@ -10,13 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 import ToastNotification from "././components/ToastNotification/ToastNotification.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter basename="/chatquo">
         <App />
         <Global />
         <ToastNotification />
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
 );

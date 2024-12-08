@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ToastNotification = () => {
   const customToastContent = () => (
-    <div style={{ color: "var(--secondary-text)" }} />
+    <div style={{ color: "var(--dark-blue)" }} />
   );
 
   return (
@@ -20,13 +20,13 @@ const ToastNotification = () => {
       toastClassName="blue-toast"
       toastContent={customToastContent}
       toastStyle={{
-        background: "var(--card-bg-color)",
-        color: "var(--error-text)",
+        background: "var(--light-blue)",
+        color: "var(--error-red)",
         width: "300px",
         fontSize: "20px",
         borderRadius: "10px",
       }}
-      progressStyle={{ background: "var(--secondary-text)" }}
+      progressStyle={{ background: "var(--dark-blue)" }}
       icon={false}
       showOnlyTheLastOne={true}
     />

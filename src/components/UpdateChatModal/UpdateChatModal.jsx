@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { updateChatThunk } from "../../store/Chat/operations";
-import ModalWindow from "../Modal/ModalWindow";
+import ModalWindow from "../ModalWindow/ModalWindow";
 import { useDialogClose } from "../../hooks/useDialogClose";
 import {
   Form,
@@ -25,9 +25,11 @@ const UpdateChatModal = ({ onClose, chat, isOpen }) => {
 
   const onSubmit = (data) => {
     const { chatName } = data;
-    if (chatName.trim()) {
+    if (chatName.trim() && chatName !== chat.name) {
       dispatch(updateChatThunk({ chatId: chat._id, name: chatName }));
       onClose();
+    } else if (chatName === chat.name) {
+      alert("New chat name cannot be the same as the old one!");
     } else {
       alert("Chat name cannot be empty!");
     }
@@ -40,15 +42,25 @@ const UpdateChatModal = ({ onClose, chat, isOpen }) => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormHeading>Update chat</FormHeading>
         <FormLabel>
-          Chat Name
+          Old Chat Name
+          <FormInput type="text" value={chat.name} readOnly />
+        </FormLabel>
+
+        <FormLabel>
+          New Chat Name
           <FormInput
             type="text"
             placeholder="Enter new chat name"
-            {...register("chatName", { required: "Chat name is required" })}
+            {...register("chatName", {
+              required: "Chat name is required",
+              validate: (value) =>
+                value.trim() !== chat.name || "New chat name must be different",
+            })}
             $error={errors.chatName}
           />
           {errors.chatName && <span>{errors.chatName.message}</span>}
         </FormLabel>
+
         <FormBtn type="submit">Save changes</FormBtn>
       </Form>
     </ModalWindow>

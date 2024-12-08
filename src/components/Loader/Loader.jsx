@@ -8,7 +8,6 @@ const Loading = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
-  color: black;
 `;
 
 const Loader = ({ visible }) => {
@@ -16,7 +15,7 @@ const Loader = ({ visible }) => {
     <Loading>
       <RotatingLines
         visible={visible}
-        strokeColor={"var(--loader)"}
+        strokeColor={"var(--grey)"}
         strokeWidth="5"
         animationDuration="5"
         ariaLabel="rotating-lines-loading"

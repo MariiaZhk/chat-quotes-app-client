@@ -1,7 +1,7 @@
 import { selectIsLogged } from "../../store/Auth/selectors";
 import { useSelector } from "react-redux";
 import { StyledUserAuthLink, StyledWrapper } from "./Header.styled";
-import logo from "../../assets/Logo.png";
+import logo from "../../assets/logo.svg";
 import UserAuth from "./UserAuth";
 
 export const Header = () => {
@@ -12,7 +12,7 @@ export const Header = () => {
         <StyledUserAuthLink to={isAuthenticated ? "/home" : "/welcome"}>
           <img
             src={logo}
-            alt="Logo"
+            alt="logo"
             style={{ width: "120px", height: "auto" }}
           />
         </StyledUserAuthLink>

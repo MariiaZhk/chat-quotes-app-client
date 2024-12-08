@@ -21,11 +21,11 @@ export const StyledLink = styled(Link)`
 `;
 
 export const StyledSpan = styled.span`
-  color: var(--secondary-text);
+  color: var(--dark-blue);
   font-size: 16px;
   line-height: 1.3;
   &:hover {
-    color: var(--accent-text);
+    color: var(--accent-orange);
   }
   @media only screen and (min-width: 768px) {
     font-size: 18px;

@@ -6,16 +6,15 @@ export const ChatItemStyled = styled.li`
   justify-content: space-between;
   gap: 10px;
   padding: 10px;
-
   border-bottom: 2px solid var(--light-grey);
   cursor: pointer;
   background-color: ${({ $isSelected }) =>
-    $isSelected ? "grey" : "transparent"};
+    $isSelected ? "var(--grey)" : "transparent"};
   transition: background-color 0.2s ease;
 
   &:hover {
     background-color: ${({ $isSelected }) =>
-      $isSelected ? "grey" : "lightGrey"};
+      $isSelected ? "var(--grey)" : "var(--light-grey)"};
   }
 `;
 
@@ -28,7 +27,6 @@ export const ChatItemIcon = styled.img`
 
 export const ChatItemName = styled.span`
   font-size: 16px;
-  color: var(--primary-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -39,6 +37,7 @@ export const ChevronIconWrapper = styled.div`
   justify-content: center;
   cursor: pointer;
 
-  /* &:hover {
-    color: orange; /* Change icon color to orange on hover */
+  &:hover svg {
+    stroke: var(--accent-orange);
+  }
 `;

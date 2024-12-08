@@ -18,17 +18,15 @@ export const FormLabel = styled.label`
   display: flex;
   flex-direction: column;
   line-height: 24px;
-  color: var(--primary-text);
 `;
 
 export const FormInput = styled.input`
   position: relative;
   padding: 12px 10px;
   outline: none;
-  color: ${({ $error }) =>
-    $error ? "var(--error-text)" : "var(--secondary-text)"};
+  color: ${({ $error }) => ($error ? "var(--error-red)" : "var(--dark-blue)")};
   border: 1px solid
-    ${({ $error }) => ($error ? "var(--error-text)" : "var(--secondary-text)")};
+    ${({ $error }) => ($error ? "var(--error-red)" : "var(--dark-blue)")};
 
   &::placeholder {
     color: var(--grey);

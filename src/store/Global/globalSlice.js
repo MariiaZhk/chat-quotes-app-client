@@ -8,9 +8,8 @@ import {
 import {
   addChatThunk,
   fetchChatsThunk,
-  getQuoteThunk,
+  fetchQuoteThunk,
   removeChatThunk,
-  sendMessageThunk,
   updateChatThunk,
 } from "../Chat/operations";
 
@@ -60,8 +59,7 @@ const globalSlice = createSlice({
           fetchChatsThunk.fulfilled,
           updateChatThunk.fulfilled,
           removeChatThunk.fulfilled,
-          sendMessageThunk.fulfilled,
-          getQuoteThunk.fulfilled
+          fetchQuoteThunk.fulfilled
         ),
         handleFulfilled
       )
@@ -75,8 +73,7 @@ const globalSlice = createSlice({
           fetchChatsThunk.pending,
           updateChatThunk.pending,
           removeChatThunk.pending,
-          sendMessageThunk.pending,
-          getQuoteThunk.pending
+          fetchQuoteThunk.pending
         ),
 
         handlePending
@@ -91,8 +88,7 @@ const globalSlice = createSlice({
           fetchChatsThunk.rejected,
           updateChatThunk.rejected,
           removeChatThunk.rejected,
-          sendMessageThunk.rejected,
-          getQuoteThunk.rejected
+          fetchQuoteThunk.rejected
         ),
 
         handleRejected

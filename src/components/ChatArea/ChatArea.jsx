@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "nanoid";
+import { ChatItemIcon, ChatItemName } from "../ChatItem/ChatItem.styled";
+import defaultImage from "../../assets/defaultUserImg.png";
 import {
   StyledChatArea,
   Message,
@@ -8,9 +9,9 @@ import {
   MessageList,
   ChatAreaHead,
 } from "./ChatArea.styled";
-import { getQuoteThunk, sendMessageThunk } from "../../store/Chat/operations";
 import { selectCurrentChat } from "../../store/Chat/selectors";
-import { ChatItemIcon, ChatItemName } from "../ChatItem/ChatItem.styled";
+import { fetchQuoteThunk } from "../../store/Chat/operations";
+import { updateChatMessages } from "../../store/Chat/chatSlice";
 
 const ChatArea = () => {
   const [message, setMessage] = useState("");
@@ -19,49 +20,43 @@ const ChatArea = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!message.trim() || !currentChat) return;
+
+    if (!message.trim() || !currentChat?._id) return;
 
     const userMessage = {
       content: message,
       sender: "You",
-      _id: nanoid(),
       timestamp: new Date().toISOString(),
     };
 
-    dispatch(
-      sendMessageThunk({
-        messageContent: userMessage.content,
-        senderId: userMessage.sender,
-      })
-    );
-    setMessage("");
-
     try {
-      const quoteAction = dispatch(getQuoteThunk(message));
+      const quotableReplyContent = await dispatch(
+        fetchQuoteThunk(message)
+      ).unwrap();
 
-      if (quoteAction.type === "chats/getQuotes/fulfilled") {
-        const fetchedQuote = quoteAction.payload;
+      const quotableMessage = {
+        content: quotableReplyContent,
+        sender: "Quotable",
+        timestamp: new Date().toISOString(),
+      };
 
-        const autoResponse = {
-          content: fetchedQuote.content || "No quote found.",
-          sender: fetchedQuote.author || "Unknown",
-          _id: nanoid(),
-          timestamp: new Date().toISOString(),
-        };
+      const updatedMessages = [
+        ...currentChat.messages,
+        userMessage,
+        quotableMessage,
+      ];
 
-        dispatch(
-          sendMessageThunk({
-            messageContent: autoResponse.content,
-            senderId: autoResponse.sender,
-            isQuote: true,
-          })
-        );
-      } else {
-        console.error("No quote found:", quoteAction.payload);
-      }
+      dispatch(
+        updateChatMessages({
+          chatId: currentChat._id,
+          messages: updatedMessages,
+        })
+      );
     } catch (error) {
       console.error("Error fetching quote:", error);
     }
+
+    setMessage("");
   };
 
   return (
@@ -69,7 +64,10 @@ const ChatArea = () => {
       <ChatAreaHead>
         {currentChat ? (
           <>
-            <ChatItemIcon src="../../assets/Logo.png" alt="Chat Icon" />
+            <ChatItemIcon
+              src={currentChat.icon || defaultImage}
+              alt="Chat Icon"
+            />
             <ChatItemName>{currentChat.name}</ChatItemName>
           </>
         ) : (
@@ -78,9 +76,9 @@ const ChatArea = () => {
       </ChatAreaHead>
 
       <MessageList>
-        {currentChat && currentChat.messages?.length > 0 ? (
-          currentChat.messages.map((msg) => (
-            <Message key={msg._id} $isUserMessage={msg.sender === "You"}>
+        {currentChat?.messages.length > 0 ? (
+          currentChat.messages.map((msg, index) => (
+            <Message key={index} $isUserMessage={msg.sender === "You"}>
               <p>
                 <strong>{msg.sender}:</strong> {msg.content}
               </p>
@@ -98,14 +96,8 @@ const ChatArea = () => {
           placeholder="Type your message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          disabled={!currentChat}
-          aria-disabled={!currentChat}
         />
-        <button
-          type="submit"
-          disabled={!currentChat || !message.trim()}
-          aria-disabled={!currentChat || !message.trim()}
-        >
+        <button type="submit" disabled={!message.trim()}>
           Send
         </button>
       </MessageInput>

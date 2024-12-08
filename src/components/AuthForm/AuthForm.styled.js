@@ -13,17 +13,16 @@ export const StyledSection = styled.section`
 export const FormContainer = styled.div`
   padding: 20px 30px;
   background-color: var(--card-bg-color);
-
   border-radius: 10px;
 `;
 
 export const BtnLink = styled(NavLink)`
-  color: var(--secondary-text);
+  color: var(--dark-blue);
   transition: all 0.4s;
 
   &:hover,
   &:focus {
-    color: var(--accent-text);
+    color: var(--accent-orange);
   }
 `;
 
@@ -46,6 +45,6 @@ export const PassShowBtn = styled.button`
 export const ErrorSpan = styled.span`
   position: absolute;
   bottom: -24px;
-  color: var(--error-text);
+  color: var(--error-red);
   font-size: 14px;
 `;

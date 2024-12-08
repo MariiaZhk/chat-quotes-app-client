@@ -6,13 +6,13 @@ export const StyledSidebar = styled.aside`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--white-text);
+  background-color: var(--white);
   border-right: 3px solid var(--light-grey);
 `;
 export const SidebarActionsWrap = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: var(--card-bg-color);
+  background-color: var(--light-blue);
   gap: 10px;
   padding: 10px;
 `;
@@ -42,27 +42,27 @@ export const SidebarButton = styled.button`
   align-items: center;
   background-color: transparent;
   box-shadow: none;
-  color: var(--secondary-text);
+  color: var(--dark-blue);
 
   &:hover,
   &:focus {
     background-color: transparent;
-    color: var(--accent-text);
+    color: var(--accent-orange);
   }
 
   svg {
     width: 20px;
     height: 20px;
-    color: var(--secondary-text);
+    color: var(--dark-blue);
     &:hover,
     &:focus {
-      color: var(--accent-text);
+      color: var(--accent-color);
     }
   }
 `;
 
 export const StyledTitle = styled.h3`
-  color: var(--secondary-text);
+  color: var(--dark-blue);
 `;
 
 export const StyledSearchInput = styled.input`

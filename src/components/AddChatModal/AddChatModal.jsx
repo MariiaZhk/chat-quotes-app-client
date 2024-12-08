@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addChatThunk } from "../../store/Chat/operations";
-import ModalWindow from "../Modal/ModalWindow";
+import ModalWindow from "../ModalWindow/ModalWindow";
 import {
   Form,
   FormBtn,

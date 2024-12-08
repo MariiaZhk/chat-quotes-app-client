@@ -90,7 +90,7 @@ const Sidebar = () => {
             <ChatItem
               key={chat._id}
               chat={chat}
-              onSelect={() => dispatch(setCurrentChat(chat._id))}
+              onSelect={() => dispatch(setCurrentChat(chat))}
             />
           ))
         ) : (

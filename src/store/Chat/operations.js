@@ -58,82 +58,23 @@ export const removeChatThunk = createAsyncThunk(
   }
 );
 
-// export const getQuoteThunk = createAsyncThunk(
-//   "chats/getQuotes",
-//   async (message, thunkAPI) => {
-//     try {
-//       const query = encodeURIComponent(message.trim());
-//       const { data } = await quotableApi.get(`search/quotes?query=${query}`);
-//       if (data.results.length === 0) {
-//         return thunkAPI.rejectWithValue("No quotes found");
-//       }
-//       const randomQuote =
-//         data.results[Math.floor(Math.random() * data.results.length)];
-//       return randomQuote;
-//     } catch (error) {
-//       toast.error("Error fetching quotes: " + error.message);
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-// export const sendMessageThunk = createAsyncThunk(
-//   "chats/sendMessage",
-//   async ({ chatId, messageContent, senderId }, thunkAPI) => {
-//     try {
-//       const { data } = await api.post(`/chats/${chatId}/messages`, {
-//         content: messageContent,
-//         sender: senderId,
-//       });
-//       toast.success("Message sent successfully!");
-//       return { chatId, message: data };
-//     } catch (error) {
-//       toast.error("Error sending message: " + error.message);
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-export const getQuoteThunk = createAsyncThunk(
-  "chats/getQuote",
-  async ({ chatId, senderId }, thunkAPI) => {
+export const fetchQuoteThunk = createAsyncThunk(
+  "chats/fetchQuote",
+  async (query, thunkAPI) => {
     try {
-      // Отримуємо цитату з API
-      const { data } = await quotableApi.get("/random");
-      const { content, author } = data;
-
-      // Формуємо повідомлення
-      const messageContent = `${content} - ${author || "Unknown"}`;
-
-      // Надсилаємо цитату на бекенд
-      const result = await thunkAPI.dispatch(
-        sendMessageThunk({
-          content: messageContent,
-          senderId,
-          isQuote: true,
-        })
+      const response = await quotableApi.get(
+        `/search/quotes?query=${encodeURIComponent(query)}`
       );
-
-      return result.payload.message;
+      const data = response.data;
+      if (data.results && data.results.length > 0) {
+        const randomIndex = Math.floor(Math.random() * data.results.length);
+        return data.results[randomIndex].content;
+      } else {
+        return "No quotes found for your query.";
+      }
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-export const sendMessageThunk = createAsyncThunk(
-  "chats/sendMessage",
-  async ({ chatId, content, senderId, isQuote = false }, thunkAPI) => {
-    try {
-      const { data } = await api.post(`/chats/${chatId}/messages`, {
-        content,
-        sender: senderId,
-        isQuote,
-      });
-
-      return { chatId, message: data }; // Повертаємо chatId і нове повідомлення
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+      console.error("Error fetching bot response:", error);
+      return thunkAPI.rejectWithValue("Sorry, something went wrong.");
     }
   }
 );

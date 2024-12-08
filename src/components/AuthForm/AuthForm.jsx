@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -20,7 +18,7 @@ import {
   FormLabel,
 } from "../CommonStyledComponents/CommonStyledComponents";
 
-function AuthForm({ type, onSubmit, schema }) {
+const AuthForm = ({ type, onSubmit, schema }) => {
   const [eyePass, setEyePass] = useState({
     password: false,
     repPassword: false,
@@ -130,6 +128,6 @@ function AuthForm({ type, onSubmit, schema }) {
       </FormContainer>
     </StyledSection>
   );
-}
+};
 
 export default AuthForm;

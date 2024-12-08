@@ -6,7 +6,7 @@ body {
   font-family: 'Roboto Regular';
   font-size: 18px;
   min-height: 100vh;
-  color: var(--primary-text);
+  color: var(--dark-grey-text);
   background-color: var(--main-bg-color);
  }
 
@@ -45,8 +45,8 @@ a {
 button {
   cursor: pointer;
   box-shadow: var(--shadow);
-  background-color: var(--btn-bg-color);
-  color: var( --white-text);
+  background-color: var(--dark-blue);
+  color: var( --white);
   border-radius: 16px;
   border:none;
    transition: all 0.4s;
@@ -58,7 +58,7 @@ button {
 }
 
 svg {
-  color: var(--icons-color);
+  color: var(--dark-blue);
   font-size: 20px;
 }
 
@@ -68,7 +68,7 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
   background-color: inherit !important;
-  color: var(--secondary-text);
+  color: var(--dark-blue);
 }
   input{
     border-radius: 16px;

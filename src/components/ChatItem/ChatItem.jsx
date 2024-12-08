@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { setCurrentChat } from "../../store/Chat/chatSlice";
 import { selectCurrentChat } from "../../store/Chat/selectors";
 import { DialogBtnContainer } from "../Dialog/Dialog.styled";
+import defaultImage from "../../assets/defaultUserImg.png";
 
 const ChatItem = ({ chat }) => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const ChatItem = ({ chat }) => {
   const handleCloseDialog = () => dispatch(closeDialog());
 
   const handleSelectChat = () => {
-    dispatch(setCurrentChat(chat._id));
+    dispatch(setCurrentChat(chat));
   };
 
   const handleConfirmDelete = () => {
@@ -52,7 +53,7 @@ const ChatItem = ({ chat }) => {
       .unwrap()
       .then(() => {
         toast.success("Chat deleted successfully!");
-        dispatch(closeDialog()); // Close the dialog after deletion
+        dispatch(closeDialog());
       })
       .catch((error) => {
         toast.error(
@@ -64,7 +65,7 @@ const ChatItem = ({ chat }) => {
   return (
     <>
       <ChatItemStyled onClick={handleSelectChat} $isSelected={isSelected}>
-        <ChatItemIcon src="../../assets/Logo.png" alt="Chat Icon" />
+        <ChatItemIcon src={chat.icon || defaultImage} alt="Chat Icon" />
         <ChatItemName>{chat.name}</ChatItemName>
         <ChevronIconWrapper
           onClick={(e) => handleOpenDialog(e, "main")}

@@ -15,7 +15,7 @@ export const ModalContent = styled.div`
   position: relative;
   border-radius: 10px;
   padding: 24px 16px;
-  background-color: var(--card-bg-color);
+  background-color: var(--light-blue);
   width: 80%;
   max-width: 400px;
   box-shadow: var(--shadow);
@@ -44,6 +44,6 @@ export const ModalButtonClose = styled.button`
   transition: color 250ms ease-in-out;
   &:hover,
   &:focus {
-    color: var(--accent-text);
+    color: var(--accent-orange);
   }
 `;
