@@ -17,10 +17,6 @@ const schema = yup
       .string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
-    // repPassword: yup
-    //   .string()
-    //   .oneOf([yup.ref("password")], "Passwords don't match")
-    //   .required("Password is required"),
   })
   .required();
 
