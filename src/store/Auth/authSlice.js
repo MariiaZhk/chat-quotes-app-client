@@ -65,13 +65,13 @@ export const authSlice = createSlice({
       })
 
       .addCase(refreshThunk.pending, (state) => {
-        // state.isLogged = true;
         state.isRefresh = true;
       })
       .addCase(refreshThunk.fulfilled, (state, { payload }) => {
         state.user.email = payload.email;
         state.user.firstName = payload.firstName;
         state.user.lastName = payload.lastName;
+        state.chats = payload.chats;
         state.isLogged = true;
         state.isRefresh = false;
       })

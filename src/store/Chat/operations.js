@@ -78,3 +78,32 @@ export const fetchQuoteThunk = createAsyncThunk(
     }
   }
 );
+
+export const addMessageThunk = createAsyncThunk(
+  "chats/addMessage",
+  async ({ chatId, sender, content }, thunkAPI) => {
+    try {
+      const { data } = await api.post(`/chats/${chatId}/messages`, {
+        sender,
+        content,
+      });
+      return { chatId, message: data };
+    } catch (error) {
+      toast.error("Error sending message: " + error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchChatMessagesThunk = createAsyncThunk(
+  "chats/fetchChatMessages",
+  async (chatId, thunkAPI) => {
+    try {
+      const { data } = await api.get(`/chats/${chatId}/messages`);
+      return { chatId, messages: data };
+    } catch (error) {
+      toast.error("Error fetching messages: " + error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);

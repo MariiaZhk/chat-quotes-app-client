@@ -7,6 +7,8 @@ import {
 } from "../Auth/operations.js";
 import {
   addChatThunk,
+  addMessageThunk,
+  fetchChatMessagesThunk,
   fetchChatsThunk,
   fetchQuoteThunk,
   removeChatThunk,
@@ -59,7 +61,9 @@ const globalSlice = createSlice({
           fetchChatsThunk.fulfilled,
           updateChatThunk.fulfilled,
           removeChatThunk.fulfilled,
-          fetchQuoteThunk.fulfilled
+          fetchQuoteThunk.fulfilled,
+          addMessageThunk.fulfilled,
+          fetchChatMessagesThunk.fulfilled
         ),
         handleFulfilled
       )
@@ -73,7 +77,9 @@ const globalSlice = createSlice({
           fetchChatsThunk.pending,
           updateChatThunk.pending,
           removeChatThunk.pending,
-          fetchQuoteThunk.pending
+          fetchQuoteThunk.pending,
+          addMessageThunk.pending,
+          fetchChatMessagesThunk.pending
         ),
 
         handlePending
@@ -88,7 +94,9 @@ const globalSlice = createSlice({
           fetchChatsThunk.rejected,
           updateChatThunk.rejected,
           removeChatThunk.rejected,
-          fetchQuoteThunk.rejected
+          fetchQuoteThunk.rejected,
+          addMessageThunk.rejected,
+          fetchChatMessagesThunk.rejected
         ),
 
         handleRejected

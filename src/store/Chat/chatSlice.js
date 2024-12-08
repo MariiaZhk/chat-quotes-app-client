@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addChatThunk,
+  addMessageThunk,
+  fetchChatMessagesThunk,
   fetchChatsThunk,
   fetchQuoteThunk,
   removeChatThunk,
@@ -36,6 +38,19 @@ export const chatSlice = createSlice({
       .addCase(addChatThunk.fulfilled, (state, { payload }) => {
         state.chats.push(payload);
       })
+
+      .addCase(addMessageThunk.fulfilled, (state, { payload }) => {
+        const { chatId, message } = payload;
+        const chat = state.chats.find((chat) => chat._id === chatId);
+
+        if (chat) {
+          chat.messages.push(message);
+          if (state.currentChat._id === chatId) {
+            state.currentChat.messages.push(message);
+          }
+        }
+      })
+
       .addCase(fetchChatsThunk.fulfilled, (state, { payload }) => {
         state.chats = payload;
         if (payload.length > 0) {
@@ -63,6 +78,17 @@ export const chatSlice = createSlice({
       .addCase(fetchQuoteThunk.fulfilled, (state, { payload }) => {
         const newMessages = [...state.currentChat.messages, payload];
         state.currentChat.messages = newMessages;
+      })
+
+      .addCase(fetchChatMessagesThunk.fulfilled, (state, { payload }) => {
+        const { chatId, messages } = payload;
+        const chat = state.chats.find((chat) => chat._id === chatId);
+        if (chat) {
+          chat.messages = messages;
+          if (state.currentChat._id === chatId) {
+            state.currentChat.messages = messages;
+          }
+        }
       });
   },
 });

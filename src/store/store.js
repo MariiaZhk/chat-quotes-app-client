@@ -23,7 +23,7 @@ const authPersistConfig = {
 const chatPersistConfig = {
   key: "chat",
   storage,
-  whitelist: ["chats"],
+  whitelist: [],
 };
 const persistGlobalConfig = {
   key: "global",

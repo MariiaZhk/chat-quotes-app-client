@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatItemIcon, ChatItemName } from "../ChatItem/ChatItem.styled";
 import defaultImage from "../../assets/defaultUserImg.png";
@@ -10,7 +10,11 @@ import {
   ChatAreaHead,
 } from "./ChatArea.styled";
 import { selectCurrentChat } from "../../store/Chat/selectors";
-import { fetchQuoteThunk } from "../../store/Chat/operations";
+import {
+  addMessageThunk,
+  fetchChatMessagesThunk,
+  fetchQuoteThunk,
+} from "../../store/Chat/operations";
 import { updateChatMessages } from "../../store/Chat/chatSlice";
 
 const ChatArea = () => {
@@ -18,6 +22,18 @@ const ChatArea = () => {
   const dispatch = useDispatch();
   const currentChat = useSelector(selectCurrentChat);
 
+  useEffect(() => {
+    if (currentChat?._id) {
+      dispatch(fetchChatMessagesThunk(currentChat._id));
+    }
+  }, [currentChat._id, dispatch]);
+
+  useEffect(() => {
+    const messageList = document.getElementById("message-list");
+    messageList?.scrollTo(0, messageList.scrollHeight);
+  }, [currentChat?.messages]);
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,7 +45,27 @@ const ChatArea = () => {
       timestamp: new Date().toISOString(),
     };
 
+    setMessage("");
+
     try {
+      await dispatch(
+        addMessageThunk({
+          chatId: currentChat._id,
+          content: userMessage.content,
+          sender: userMessage.sender,
+          timestamp: userMessage.timestamp,
+        })
+      ).unwrap();
+
+      dispatch(
+        updateChatMessages({
+          chatId: currentChat._id,
+          messages: [...currentChat.messages, userMessage],
+        })
+      );
+
+      await delay(3000);
+
       const quotableReplyContent = await dispatch(
         fetchQuoteThunk(message)
       ).unwrap();
@@ -40,23 +76,24 @@ const ChatArea = () => {
         timestamp: new Date().toISOString(),
       };
 
-      const updatedMessages = [
-        ...currentChat.messages,
-        userMessage,
-        quotableMessage,
-      ];
+      await dispatch(
+        addMessageThunk({
+          chatId: currentChat._id,
+          content: quotableMessage.content,
+          sender: quotableMessage.sender,
+          timestamp: quotableMessage.timestamp,
+        })
+      );
 
       dispatch(
         updateChatMessages({
           chatId: currentChat._id,
-          messages: updatedMessages,
+          messages: [...currentChat.messages, userMessage, quotableMessage],
         })
       );
     } catch (error) {
-      console.error("Error fetching quote:", error);
+      console.error("Error sending message:", error);
     }
-
-    setMessage("");
   };
 
   return (
@@ -75,7 +112,7 @@ const ChatArea = () => {
         )}
       </ChatAreaHead>
 
-      <MessageList>
+      <MessageList id="message-list">
         {currentChat?.messages.length > 0 ? (
           currentChat.messages.map((msg, index) => (
             <Message key={index} $isUserMessage={msg.sender === "You"}>
