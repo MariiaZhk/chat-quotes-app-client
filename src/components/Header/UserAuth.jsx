@@ -1,4 +1,4 @@
-import { LuUserCircle2 } from "react-icons/lu";
+import { FaRegUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -42,7 +42,7 @@ const UserAuth = () => {
   return (
     <StyledUserAuthWrapper>
       <StyledLink {...linkProps}>
-        <LuUserCircle2 size={28} />
+        <FaRegUserCircle size={28} />
         <StyledSpan>{displayText}</StyledSpan>
       </StyledLink>
     </StyledUserAuthWrapper>
