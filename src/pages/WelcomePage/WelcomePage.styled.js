@@ -25,7 +25,7 @@ export const WelcomeRightContainer = styled.div`
   border-radius: 10px;
   padding: 23px 16px;
   box-shadow: var(--shadow);
-  background: var(--card-bg-color);
+  background: var(--light-blue);
   margin-bottom: 20px;
 
   @media only screen and (min-width: 768px) {
@@ -145,6 +145,6 @@ export const RightItem = styled.li`
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--secondary-text);
+    background-color: var(--dark-blue);
   }
 `;
