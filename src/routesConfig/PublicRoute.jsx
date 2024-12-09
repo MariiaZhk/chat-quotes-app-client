@@ -3,8 +3,8 @@ import { Navigate } from "react-router-dom";
 import { selectIsLogged } from "../store/Auth/selectors";
 
 const PublicRoute = ({ children }) => {
-  const isLoggedIn = useSelector(selectIsLogged);
-  if (isLoggedIn) {
+  const isLogged = useSelector(selectIsLogged);
+  if (isLogged) {
     return <Navigate to="/home" />;
   }
   return children;

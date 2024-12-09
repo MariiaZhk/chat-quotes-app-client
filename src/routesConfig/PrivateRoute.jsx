@@ -3,8 +3,8 @@ import { Navigate } from "react-router-dom";
 import { selectIsLogged } from "../store/Auth/selectors";
 
 const PrivateRoute = ({ children }) => {
-  const isLogedIn = useSelector(selectIsLogged);
-  if (isLogedIn) {
+  const isLogged = useSelector(selectIsLogged);
+  if (isLogged) {
     return children;
   } else {
     return <Navigate to="/signin" />;

@@ -65,7 +65,7 @@ export const authSlice = createSlice({
       })
 
       .addCase(refreshThunk.pending, (state) => {
-        state.isRefresh = true;
+        state.isRefresh = false;
       })
       .addCase(refreshThunk.fulfilled, (state, { payload }) => {
         state.user.email = payload.email;

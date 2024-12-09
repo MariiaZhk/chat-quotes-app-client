@@ -73,7 +73,7 @@ export const fetchQuoteThunk = createAsyncThunk(
         return "No quotes found for your query.";
       }
     } catch (error) {
-      console.error("Error fetching bot response:", error);
+      console.error("Error fetching quote response:", error);
       return thunkAPI.rejectWithValue("Sorry, something went wrong.");
     }
   }
