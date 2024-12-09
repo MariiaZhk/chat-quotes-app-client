@@ -16,7 +16,6 @@ import { globalReducer } from "./Global/globalSlice";
 
 const authPersistConfig = {
   key: "auth",
-  version: 1,
   storage,
   whitelist: ["token"],
 };

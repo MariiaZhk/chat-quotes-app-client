@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api, clearToken, setToken } from "../../configApi/configApi";
+import { authSlice } from "./authSlice";
 
 export const registerThunk = createAsyncThunk(
   "auth/register",
@@ -32,7 +33,6 @@ export const logoutThunk = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       await api.post("auth/logout");
-      localStorage.removeItem("auth");
       clearToken();
     } catch (error) {
       return thunkApi.rejectWithValue(error.message);
@@ -43,7 +43,8 @@ export const logoutThunk = createAsyncThunk(
 export const refreshThunk = createAsyncThunk(
   "auth/current",
   async (_, thunkApi) => {
-    const savedToken = thunkApi.getState().authSlice.token;
+    const state = thunkApi.getState();
+    const savedToken = state.auth.token;
     if (savedToken) {
       setToken(savedToken);
     } else {

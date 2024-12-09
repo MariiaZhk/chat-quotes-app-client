@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import {
   ErrorSpan,
   PassShowBtn,
@@ -17,14 +20,36 @@ import {
   FormInput,
   FormLabel,
 } from "../CommonStyledComponents/CommonStyledComponents";
+import { registerThunk, loginThunk } from "../../store/Auth/operations";
 
-const AuthForm = ({ type, onSubmit, schema }) => {
+const AuthForm = ({ type }) => {
   const [eyePass, setEyePass] = useState({
     password: false,
-    repPassword: false,
   });
 
   const path = type === "signup" ? "/signin" : "/signup";
+
+  const schema = yup
+    .object({
+      firstName:
+        type === "signup"
+          ? yup.string().required("First Name is required")
+          : yup.mixed(),
+      lastName:
+        type === "signup"
+          ? yup.string().required("Last Name is required")
+          : yup.mixed(),
+      email: yup
+        .string()
+        .email("Please write valid email")
+        .matches(/^(?!.*@[^,]*,)/)
+        .required("Email is required"),
+      password: yup
+        .string()
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required"),
+    })
+    .required();
 
   const {
     register,
@@ -35,8 +60,29 @@ const AuthForm = ({ type, onSubmit, schema }) => {
     mode: "onChange",
   });
 
+  const dispatch = useDispatch();
+
   const togglePasswordVisibility = (field) => {
     setEyePass((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
+  const onSubmit = (data) => {
+    const { email, password, firstName, lastName } = data;
+    const normalizedEmail = email.toLowerCase();
+
+    if (type === "signup") {
+      dispatch(
+        registerThunk({ email: normalizedEmail, password, firstName, lastName })
+      )
+        .unwrap()
+        .then(() => toast.success("Registration successful"))
+        .catch(() => toast.error("Something went wrong. Please, try again"));
+    } else {
+      dispatch(loginThunk({ email: normalizedEmail, password }))
+        .unwrap()
+        .then(() => toast.success("Login successful"))
+        .catch((err) => toast.error(err));
+    }
   };
 
   return (
@@ -106,6 +152,7 @@ const AuthForm = ({ type, onSubmit, schema }) => {
               {eyePass.password ? <OpenPassEye /> : <PassEye />}
             </PassShowBtn>
           </FormLabel>
+
           <FormBtn type="submit">
             {type === "signup" ? "Sign Up" : "Sign In"}
           </FormBtn>

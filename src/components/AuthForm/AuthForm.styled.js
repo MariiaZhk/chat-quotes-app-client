@@ -12,7 +12,7 @@ export const StyledSection = styled.section`
 
 export const FormContainer = styled.div`
   padding: 20px 30px;
-  background-color: var(--card-bg-color);
+  background-color: var(--light-blue);
   border-radius: 10px;
 `;
 

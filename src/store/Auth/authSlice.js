@@ -38,13 +38,7 @@ export const authSlice = createSlice({
         state.user.firstName = payload.firstName;
         state.user.lastName = payload.lastName;
         state.token = payload.token;
-        state.isLogged = true;
-      })
-
-      .addCase(registerThunk.rejected, (state, { payload }) => {
         state.isLogged = false;
-        state.isLoading = false;
-        state.isError = payload;
       })
 
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
@@ -65,13 +59,12 @@ export const authSlice = createSlice({
       })
 
       .addCase(refreshThunk.pending, (state) => {
-        state.isRefresh = false;
+        state.isRefresh = true;
       })
       .addCase(refreshThunk.fulfilled, (state, { payload }) => {
         state.user.email = payload.email;
         state.user.firstName = payload.firstName;
         state.user.lastName = payload.lastName;
-        state.chats = payload.chats;
         state.isLogged = true;
         state.isRefresh = false;
       })
