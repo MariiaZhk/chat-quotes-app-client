@@ -1,7 +1,8 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://chat-quotes-app-server.onrender.com",
+  // baseURL: "https://chat-quotes-app-server.onrender.com",
+  baseURL: "http://localhost:5000/",
 });
 
 export const quotableApi = axios.create({

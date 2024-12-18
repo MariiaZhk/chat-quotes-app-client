@@ -44,7 +44,7 @@ export const refreshThunk = createAsyncThunk(
   "auth/current",
   async (_, thunkApi) => {
     const state = thunkApi.getState();
-    const savedToken = state.auth.token;
+    const savedToken = state.authSlice.token;
     if (savedToken) {
       setToken(savedToken);
     } else {

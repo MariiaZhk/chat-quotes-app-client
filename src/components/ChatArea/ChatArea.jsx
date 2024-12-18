@@ -64,7 +64,7 @@ const ChatArea = () => {
         })
       );
 
-      await delay(3000);
+      await delay(1000);
 
       const quotableReplyContent = await dispatch(
         fetchQuoteThunk(message)

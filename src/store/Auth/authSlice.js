@@ -38,7 +38,7 @@ export const authSlice = createSlice({
         state.user.firstName = payload.firstName;
         state.user.lastName = payload.lastName;
         state.token = payload.token;
-        state.isLogged = false;
+        state.isLogged = true;
       })
 
       .addCase(loginThunk.fulfilled, (state, { payload }) => {

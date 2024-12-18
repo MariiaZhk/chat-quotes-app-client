@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 export const StyledDialog = styled.div`
   position: absolute;
-  padding: 1rem;
+  padding: 18px;
   border: none;
   border-radius: 8px;
   box-shadow: var(--shadow);
-  width: 300px;
-  background-color: var(--light-grey);
+  width: 200px;
+  background-color: var(--white);
   z-index: 1000;
 
   &[hidden] {
@@ -17,6 +17,5 @@ export const StyledDialog = styled.div`
 export const DialogBtnContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 12px;
+  gap: 16px;
 `;
