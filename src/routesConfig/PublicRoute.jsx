@@ -4,10 +4,7 @@ import { selectIsLogged } from "../store/Auth/selectors";
 
 const PublicRoute = ({ children }) => {
   const isLogged = useSelector(selectIsLogged);
-  if (isLogged) {
-    return <Navigate to="/home" />;
-  }
-  return children;
+  return isLogged ? <Navigate to="/home" /> : children;
 };
 
 export default PublicRoute;

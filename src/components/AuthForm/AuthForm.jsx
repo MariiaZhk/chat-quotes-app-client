@@ -21,8 +21,10 @@ import {
   FormLabel,
 } from "../CommonStyledComponents/CommonStyledComponents";
 import { registerThunk, loginThunk } from "../../store/Auth/operations";
+import { useNavigate } from "react-router-dom";
 
 const AuthForm = ({ type }) => {
+  const navigate = useNavigate();
   const [eyePass, setEyePass] = useState({
     password: false,
   });
@@ -75,12 +77,19 @@ const AuthForm = ({ type }) => {
         registerThunk({ email: normalizedEmail, password, firstName, lastName })
       )
         .unwrap()
-        .then(() => toast.success("Registration successful"))
+        .then(() => {
+          navigate("/home");
+          toast.success("Registration successful. Please, login");
+        })
+
         .catch(() => toast.error("Something went wrong. Please, try again"));
     } else {
       dispatch(loginThunk({ email: normalizedEmail, password }))
         .unwrap()
-        .then(() => toast.success("Login successful"))
+        .then(() => {
+          navigate("/home");
+          toast.success("Login successful");
+        })
         .catch((err) => toast.error(err));
     }
   };

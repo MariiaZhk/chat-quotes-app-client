@@ -21,7 +21,9 @@ export const fetchChatsThunk = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { data } = await api.get("/chats");
-      console.log(data);
+      if (data.length === 0) {
+        return [];
+      }
       return data;
     } catch (error) {
       toast.error("Error fetching chats: " + error.message);

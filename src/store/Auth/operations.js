@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api, clearToken, setToken } from "../../configApi/configApi";
-import { authSlice } from "./authSlice";
 
 export const registerThunk = createAsyncThunk(
   "auth/register",
@@ -10,7 +9,7 @@ export const registerThunk = createAsyncThunk(
       setToken(data.token);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -55,7 +54,7 @@ export const refreshThunk = createAsyncThunk(
       const { data } = await api.get("auth/current");
       return data;
     } catch (error) {
-      return thunkApi.rejectWithValue(error.message);
+      return thunkApi.rejectWithValue(error.data.message);
     }
   }
 );

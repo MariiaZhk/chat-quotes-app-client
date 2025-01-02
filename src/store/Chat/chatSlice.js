@@ -55,6 +55,8 @@ export const chatSlice = createSlice({
         state.chats = payload;
         if (payload.length > 0) {
           state.currentChat = payload[0];
+        } else {
+          state.currentChat = { _id: null, name: "", messages: [] };
         }
       })
       .addCase(updateChatThunk.fulfilled, (state, { payload }) => {
@@ -63,7 +65,7 @@ export const chatSlice = createSlice({
           state.chats[index] = payload;
         }
         if (state.currentChat._id === payload._id) {
-          state.currentChat = payload; // Update current chat
+          state.currentChat = payload;
         }
       })
       .addCase(removeChatThunk.fulfilled, (state, { payload }) => {

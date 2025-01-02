@@ -94,7 +94,7 @@ const Sidebar = () => {
             />
           ))
         ) : (
-          <li>No chats found</li>
+          <li>No chats yet</li>
         )}
       </ul>
 

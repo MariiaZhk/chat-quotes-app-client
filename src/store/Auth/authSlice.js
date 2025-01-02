@@ -26,7 +26,7 @@ export const authSlice = createSlice({
         return { payload: token };
       },
       reducer: (state, { payload }) => {
-        state.token = payload;
+        state.token = payload.token;
       },
     },
   },
@@ -34,17 +34,17 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerThunk.fulfilled, (state, { payload }) => {
-        state.user.email = payload.email;
-        state.user.firstName = payload.firstName;
-        state.user.lastName = payload.lastName;
+        state.user.email = payload.user.email;
+        state.user.firstName = payload.user.firstName;
+        state.user.lastName = payload.user.lastName;
         state.token = payload.token;
-        state.isLogged = true;
+        state.isLogged = false;
       })
 
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
-        state.user.email = payload.email;
-        state.user.firstName = payload.firstName;
-        state.user.lastName = payload.lastName;
+        state.user.email = payload.user.email;
+        state.user.firstName = payload.user.firstName;
+        state.user.lastName = payload.user.lastName;
         state.token = payload.token;
         state.isLogged = true;
       })
